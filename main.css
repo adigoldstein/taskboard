@@ -1,3 +1,9 @@
+html , body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 .navbar a {
   padding-left: 15px;
   line-height: 100%;
@@ -16,7 +22,7 @@
 }
 
 main {
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 .card-list {
@@ -37,8 +43,8 @@ main {
 
 .notes-ul {
   overflow-y: auto;
-  position: relative;
-  max-height: calc(100vh - 230px);
+  /*position: relative;*/
+  max-height: calc(100vh - 200px);
   border-right: 1px solid #F5F5F5;
   border-left: 1px solid #F5F5F5;
   padding-left: 0;
@@ -54,6 +60,12 @@ main {
   margin: 10px auto;
 
 }
+.panel-footer button {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
 .panel-default {
   margin-bottom: 0;
 }
