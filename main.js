@@ -1,39 +1,56 @@
-
 // function addNote() {
 //   const liNoteElem = document.createElement('li');
 //   liNoteElem.textContent = 'New note created MAN'
 //   console.log(liNoteElem);
 // }
 
+// Add the container main list
+
+
+// Add note inside the list
+
+function addBtnListener() {
+  const addNoteBtns = document.querySelectorAll('.add-note-btn');
+// console.log(addNoteBtns);
+  for (const button of addNoteBtns) {
+    button.addEventListener('click', function (e) {
+      const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
+      console.log(notesUlElem);
+      const liNoteElem = document.createElement('li');
+      liNoteElem.className = 'notes';
+      liNoteElem.textContent = 'New note created...'
+      notesUlElem.appendChild(liNoteElem);
+
+    })
+  }
+}
+addBtnListener()
+
 function addList() {
   const mainUlList = document.querySelector('.card-list');
-  console.log(mainUlList);
-  const addListLI = document.querySelector('.add-list-li')
-  console.log(addListLI);
+  const addListLI = document.querySelector('.add-list-li');
   const liListElem = document.createElement('li');
   liListElem.className = 'cards-li';
-  liListElem.innerHTML =   `<div class="card">
+  liListElem.innerHTML = `<div class="card">
     <div class="panel panel-default">
     <div class="panel-heading">
-    <h3 class="panel-title">Done</h3>
+    <h3 class="panel-title">New list inserted</h3>
     </div>
     <ul class="notes-ul">
     <div class="noteholder">
-    <li class="notes">
-    Note item number 1 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit
-  repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis quaerat
-  quibusdam, repellat sit vel voluptatem?
-</li>
+    
+<!-- Note insert should be HERE!!!! -->
 
   </div>
   </ul>
   <div class="panel-footer">
-     <button class="add-note-btn" onclick="addNote()  ">Add Note..</button>
+  <button class="add-note-btn">Add Note..</button>
+
   </div>
   </div>
   </div>
   </li>`;
-  console.log(liListElem);
- mainUlList.insertBefore(liListElem, addListLI);
+  mainUlList.insertBefore(liListElem, addListLI);
+  addBtnListener(liListElem);
 
 }
