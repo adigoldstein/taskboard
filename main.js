@@ -1,35 +1,32 @@
-// function addNote() {
-//   const liNoteElem = document.createElement('li');
-//   liNoteElem.textContent = 'New note created MAN'
-//   console.log(liNoteElem);
-// }
+function addBtnListener(btnToListen) {
 
-// Add the container main list
+  btnToListen.addEventListener('click', function (e) {
 
+    const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
+    const liNoteElem = document.createElement('li');
 
-// Add note inside the list
+    liNoteElem.className = 'notes';
+    liNoteElem.textContent = 'New note created...';
+    notesUlElem.appendChild(liNoteElem);
+  })
+}
 
-function addBtnListener() {
+function addExistBtnListener() {
+
   const addNoteBtns = document.querySelectorAll('.add-note-btn');
-// console.log(addNoteBtns);
-  for (const button of addNoteBtns) {
-    button.addEventListener('click', function (e) {
-      const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
-      console.log(notesUlElem);
-      const liNoteElem = document.createElement('li');
-      liNoteElem.className = 'notes';
-      liNoteElem.textContent = 'New note created...'
-      notesUlElem.appendChild(liNoteElem);
 
-    })
+  for (const button of addNoteBtns) {
+    addBtnListener(button);
   }
 }
-addBtnListener()
+addExistBtnListener();
 
 function addList() {
+
   const mainUlList = document.querySelector('.card-list');
   const addListLI = document.querySelector('.add-list-li');
   const liListElem = document.createElement('li');
+
   liListElem.className = 'cards-li';
   liListElem.innerHTML = `<div class="card">
     <div class="panel panel-default">
@@ -50,7 +47,12 @@ function addList() {
   </div>
   </div>
   </li>`;
+
+
+  addBtnListener(liListElem.querySelector('button'));
+
+
   mainUlList.insertBefore(liListElem, addListLI);
-  addBtnListener(liListElem);
+
 
 }

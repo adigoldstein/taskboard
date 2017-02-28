@@ -69,3 +69,6 @@ main {
 .panel-default {
   margin-bottom: 0;
 }
+.add-list-li h3:hover {
+  cursor: hand;
+}
