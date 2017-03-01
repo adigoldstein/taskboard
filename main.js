@@ -56,24 +56,35 @@ function addList() {
 }
 
 // Change list name
+function hideH3FocusInput(e) {
+  console.info('eventtt??', e);
+  const evPressed = e.target;
+  const item = evPressed.closest('.card');
+  // console.info(item);
+  // console.info(evPressed);
+  const inputElem = item.querySelector('input');
+  const h3Elem = item.querySelector('h3');
+
+  h3Elem.style.display = 'none';
+  inputElem.style.display = 'block';
+  inputElem.focus();
+  inputElem.value = e.target.textContent;
+
+
+}
 
 function titleListenerToRename(item) {
   const h3Elem = item.querySelector('h3');
 
-  h3Elem.addEventListener('click', function hideH3FocusInput(e) {
-    const inputElem = item.querySelector('input');
+  h3Elem.addEventListener('click', hideH3FocusInput);
 
-    h3Elem.style.display = 'none';
-    inputElem.style.display = 'block';
-    inputElem.focus();
-    inputElem.value = e.target.textContent;
-
-
-  })
 }
+
 function inputListener(item) {
   const inputElem = item.querySelector('input');
   const h3Elem = item.querySelector('h3');
+
+  // When title changed and ENTER pressed
   inputElem.addEventListener('keydown', function (event) {
 
     if (event.keyCode === 13) {
@@ -85,6 +96,19 @@ function inputListener(item) {
       h3Elem.style.display = 'block';
       inputElem.style.display = 'none'
     }
+  })
+
+  // When title changed and blur
+  inputElem.addEventListener('blur', function () {
+    if (inputElem.value === '') {
+      inputElem.value = h3Elem.innerHTML;
+    }
+
+
+    h3Elem.textContent = inputElem.value;
+    h3Elem.style.display = 'block';
+    inputElem.style.display = 'none'
+
   })
 }
 
