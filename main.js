@@ -25,6 +25,14 @@ const tampletLi = `
         <div class="panel-heading">
           <h3 class="panel-title">New list inserted</h3>
           <input type="text">
+          <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li class="delete-card">Delete card</li>
+              </ul>
+            </div>
         </div>
         <ul class="notes-ul">
            <!-- Note insert should be HERE!!!! -->
@@ -41,14 +49,24 @@ function addList() {
 
   const liListElem = document.createElement('li');
 
-  liListElem.className = 'cards-li';
+  liListElem.className = 'list-li';
   liListElem.innerHTML = tampletLi;
 
   // add button listener
-  addBtnListener(liListElem.querySelector('button'));
+
+  addBtnListener(liListElem.querySelector('.add-note-btn'));
 
   titleListenerToRename(liListElem.querySelector('.panel-heading'));
   inputListener(liListElem.querySelector('.panel-heading'));
+
+  // edit menu Listener
+
+  const dropdownElem = liListElem.querySelector('.dropdown');
+
+  // Hide ul by default to created lists.
+  dropdownElem.querySelector('ul').style.display = 'none';
+  toggleMenu(dropdownElem);
+
 
   // insert created new list before the last list
   mainUlList.insertBefore(liListElem, addListLI);
@@ -57,16 +75,14 @@ function addList() {
 
 // Change list name
 function hideH3FocusInput(e) {
-  console.info('eventtt??', e);
   const evPressed = e.target;
   const item = evPressed.closest('.card');
-  // console.info(item);
-  // console.info(evPressed);
+
   const inputElem = item.querySelector('input');
   const h3Elem = item.querySelector('h3');
 
   h3Elem.style.display = 'none';
-  inputElem.style.display = 'block';
+  inputElem.style.display = 'inline-block';
   inputElem.focus();
   inputElem.value = e.target.textContent;
 
@@ -111,6 +127,70 @@ function inputListener(item) {
 
   })
 }
+
+// Dropdown list menu
+
+function toggleMenu(menu) {
+  const menuBtnElem = menu.querySelector('button');
+  menuBtnElem.addEventListener('click', function () {
+    const dropdownMenuElem = menu.querySelector('.dropdown-menu');
+    console.info(dropdownMenuElem.style.display);
+    if (dropdownMenuElem.style.display === 'none' || !dropdownMenuElem.style.display ) {
+      dropdownMenuElem.style.display = 'block';
+    } else {
+      dropdownMenuElem.style.display = 'none';
+    }
+
+  })
+}
+function dropdwonListener() {
+  const dropdownElems = document.querySelectorAll('.dropdown');
+  // console.info(dropdownElems);
+  for (const dd of dropdownElems) {
+     toggleMenu(dd); {
+
+    }
+  }
+}
+
+dropdwonListener()
+
+
+function deleteCardListener(deleteLiElem) {
+  deleteLiElem.addEventListener('click', function () {
+    console.info(deleteLiElem);
+    const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
+    // console.info(cardToDeleteLiElem);
+    const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
+    // console.info( cardToDeleteTitle);
+    const deleteAnswer = confirm('Deleting ' +  cardToDeleteTitle + ' list. are you sure?');
+    if (deleteAnswer) {
+      cardToDeleteLiElem.remove()
+    }else {
+      // *******************************************hide UL + naew list***************************
+    }
+
+  })
+
+
+
+}
+
+
+function DeleteCard() {
+  const deleteCardLiElems = document.querySelectorAll('.delete-card');
+  console.info(deleteCardLiElems);
+  for (const deleteLiElem of deleteCardLiElems) {
+    deleteCardListener(deleteLiElem);
+
+
+
+  }
+
+}
+DeleteCard()
+
+
 
 
 // Init the app

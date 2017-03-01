@@ -63,7 +63,7 @@ main {
 }
 
 .panel-heading input {
-  width: 80%;
+  width: 60%;
   outline: 2px solid deepskyblue;
   display: none;
 }
@@ -83,5 +83,17 @@ main {
   width: 85%;
   height: 230%;
 }
+
+.panel-heading {
+  position: relative;
+}
+
+.dropdown {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 3px;
+}
+
 
 
