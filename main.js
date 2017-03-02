@@ -172,8 +172,14 @@ function deleteCardListener(deleteLiElem) {
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
     // console.info( cardToDeleteTitle);
     const deleteAnswer = confirm('Deleting ' +  cardToDeleteTitle + ' list. are you sure?');
+    const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
+    console.info(ulHoldsDelete);
+
     if (deleteAnswer) {
       cardToDeleteLiElem.remove()
+    } else {
+      ulHoldsDelete.style.display = 'none';
+      
     }
 
   })
