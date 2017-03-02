@@ -52,10 +52,11 @@ main {
 
 }
 
-.notes {
+.note {
   width: 300px;
-  height: 300px;
-  border: 2px solid blueviolet;
+  max-height: 300px;
+  border: 2px solid lightblue;
+  border-radius: 10px;
   list-style: none;
   padding: 10px;
   margin: 10px auto;
@@ -67,7 +68,23 @@ main {
   outline: 2px solid deepskyblue;
   display: none;
 }
+.panel-footer .add-note-btn {
+  padding-left: 12%;
+}
+.add-note-btn , .panel-footer {
+  height: 100%;
+  width: 100%;
+  text-align: left;
+}
 
+.panel-footer {
+  padding: 0;
+  height: 50px;
+}
+
+.panel-footer:hover {
+  background-color: #a2a3a5;
+}
 .panel-footer button {
   padding: 0;
   border: none;
@@ -93,6 +110,19 @@ main {
   position: absolute;
   right: 10px;
   top: 3px;
+}
+
+.add-list-li .add-list-btn ,.add-list-btn .panel-heading{
+  height: 100%;
+  width: 100%;
+}
+
+.add-list-li .add-list-btn {
+  cursor: pointer;
+}
+.add-list-li .panel-heading {
+  /*padding: 0;*/
+  /*height: 40px;*/
 }
 
 

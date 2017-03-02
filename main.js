@@ -5,8 +5,8 @@ function addBtnListener(btnToListen) {
     const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
     const liNoteElem = document.createElement('li');
 
-    liNoteElem.className = 'notes';
-    liNoteElem.textContent = 'New note created...';
+    liNoteElem.className = 'note';
+    liNoteElem.innerHTML = ' <button type="button" class="btn btn-primary btn-xs pull-right" >Edit</button>New note created...';
     notesUlElem.appendChild(liNoteElem);
   })
 }
@@ -179,7 +179,7 @@ function deleteCardListener(deleteLiElem) {
       cardToDeleteLiElem.remove()
     } else {
       ulHoldsDelete.style.display = 'none';
-      
+
     }
 
   })
