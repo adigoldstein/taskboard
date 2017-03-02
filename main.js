@@ -20,28 +20,30 @@ function addExistBtnListener() {
   }
 }
 const tampletLi = `
-    <div class="card content-card">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">New list inserted</h3>
-          <input type="text">
-          <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li class="delete-card">Delete card</li>
-              </ul>
-            </div>
-        </div>
-        <ul class="notes-ul">
-           <!-- Note insert should be HERE!!!! -->
-        </ul>
-        <div class="panel-footer">
-          <button class="add-note-btn">Add Note..</button>
+    <li class="cards-li">
+      <div class="card content-card">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">New list inserted</h3>
+            <input type="text">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li class="delete-card">Delete card</li>
+                </ul>
+              </div>
+          </div>
+          <ul class="notes-ul">
+             <!-- Note insert should be HERE!!!! -->
+          </ul>
+          <div class="panel-footer">
+            <button class="add-note-btn">Add Note..</button>
+          </div>
         </div>
       </div>
-    </div>
+    </li>
   `;
 function addList() {
   const mainUlList = document.querySelector('.card-list');
@@ -67,6 +69,11 @@ function addList() {
   dropdownElem.querySelector('ul').style.display = 'none';
   toggleMenu(dropdownElem);
 
+  // Delete card listener
+
+  const deleteCardLiElem = liListElem.querySelector('.delete-card');
+  console.info(deleteCardLiElem);
+  deleteCardListener(deleteCardLiElem);
 
   // insert created new list before the last list
   mainUlList.insertBefore(liListElem, addListLI);
@@ -157,17 +164,16 @@ dropdwonListener()
 
 
 function deleteCardListener(deleteLiElem) {
+  console.info(deleteLiElem);
+
   deleteLiElem.addEventListener('click', function () {
-    console.info(deleteLiElem);
     const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
-    // console.info(cardToDeleteLiElem);
+    console.info(cardToDeleteLiElem);
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
     // console.info( cardToDeleteTitle);
     const deleteAnswer = confirm('Deleting ' +  cardToDeleteTitle + ' list. are you sure?');
     if (deleteAnswer) {
       cardToDeleteLiElem.remove()
-    }else {
-      // *******************************************hide UL + naew list***************************
     }
 
   })
