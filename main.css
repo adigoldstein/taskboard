@@ -52,9 +52,14 @@ main {
 
 }
 
+.note-edit-btn {
+  display: none;
+}
+
 .note {
   width: 300px;
-  max-height: 300px;
+  /*max-height: 300px;*/
+  min-height: 150px;
   border: 2px solid lightblue;
   border-radius: 10px;
   list-style: none;
@@ -110,6 +115,10 @@ main {
   position: absolute;
   right: 10px;
   top: 3px;
+}
+
+.note-text {
+  padding: 30px 5px;
 }
 
 .add-list-li .add-list-btn ,.add-list-btn .panel-heading{

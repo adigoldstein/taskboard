@@ -45,7 +45,7 @@ const tampletLi = `
       </div>
     </li>
   `;
-function addList() {
+function addList(listData) {
   const mainUlList = document.querySelector('.card-list');
   const addListLI = document.querySelector('.add-list-li');
 
@@ -53,11 +53,29 @@ function addList() {
 
   liListElem.className = 'list-li';
   liListElem.innerHTML = tampletLi;
+// console.info(listData);
+  if (listData.type !== 'click') {
+// ******************When inserting JSON data**********************
+    console.info(listData)
+    const cardTitle = liListElem.querySelector('.panel-title');
+    const noteUl = liListElem.querySelector('.notes-ul')
+    // console.info(noteUl);
+    cardTitle.innerHTML = listData.title;
+    for (const task of listData.tasks) {
+      // console.info(task.text);
+      const taskAdded = document.createElement('li');
+      taskAdded.innerHTML = task.text;
+
+      noteUl.appendChild(taskAdded)
+    }
+
+
+
+  }
 
   // add button listener
 
   addBtnListener(liListElem.querySelector('.add-note-btn'));
-
   titleListenerToRename(liListElem.querySelector('.panel-heading'));
   inputListener(liListElem.querySelector('.panel-heading'));
 
@@ -72,7 +90,6 @@ function addList() {
   // Delete card listener
 
   const deleteCardLiElem = liListElem.querySelector('.delete-card');
-  console.info(deleteCardLiElem);
   deleteCardListener(deleteCardLiElem);
 
   // insert created new list before the last list
@@ -141,7 +158,6 @@ function toggleMenu(menu) {
   const menuBtnElem = menu.querySelector('button');
   menuBtnElem.addEventListener('click', function () {
     const dropdownMenuElem = menu.querySelector('.dropdown-menu');
-    console.info(dropdownMenuElem.style.display);
     if (dropdownMenuElem.style.display === 'none' || !dropdownMenuElem.style.display ) {
       dropdownMenuElem.style.display = 'block';
     } else {
@@ -152,7 +168,6 @@ function toggleMenu(menu) {
 }
 function dropdwonListener() {
   const dropdownElems = document.querySelectorAll('.dropdown');
-  // console.info(dropdownElems);
   for (const dd of dropdownElems) {
      toggleMenu(dd); {
 
@@ -164,16 +179,12 @@ dropdwonListener()
 
 
 function deleteCardListener(deleteLiElem) {
-  console.info(deleteLiElem);
 
   deleteLiElem.addEventListener('click', function () {
     const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
-    console.info(cardToDeleteLiElem);
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
-    // console.info( cardToDeleteTitle);
     const deleteAnswer = confirm('Deleting ' +  cardToDeleteTitle + ' list. are you sure?');
     const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
-    console.info(ulHoldsDelete);
 
     if (deleteAnswer) {
       cardToDeleteLiElem.remove()
@@ -191,7 +202,6 @@ function deleteCardListener(deleteLiElem) {
 
 function DeleteCard() {
   const deleteCardLiElems = document.querySelectorAll('.delete-card');
-  console.info(deleteCardLiElems);
   for (const deleteLiElem of deleteCardLiElems) {
     deleteCardListener(deleteLiElem);
 
@@ -202,9 +212,29 @@ function DeleteCard() {
 }
 DeleteCard()
 
+// edit note behavior
+function editNoteListener(noteElem) {
+  const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
+  console.info(editBtnElem);
+  noteElem.addEventListener('mouseover' , function () {
+    // console.info(editBtnElem.style.display);
+    // alert(editBtnElem.style.display)
+    if (editBtnElem.style.display = 'none' || (!editBtnElem.style.display)) {
+      editBtnElem.style.display = 'block'
+    }
+  });
+  noteElem.addEventListener('mouseout' , function () {
+    editBtnElem.style.display = 'none'
+  })
 
+}
 
+const noteElems = document.querySelectorAll('.note')
+for (const noteElem of noteElems) {
+  console.info(noteElem);
+  editNoteListener(noteElem)
+}
 // Init the app
 function init() {
   addExistBtnListener();
@@ -221,4 +251,32 @@ function init() {
 }
 
 init();
+
+
+
+
+
+
+
+
+
+
+// ****************Import JSON stuff****************
+let listData = {};
+function reqListener () {
+  // console.log(data.responseText);
+  listData = JSON.parse(data.responseText);
+  // console.info(listData.board[0]);
+  // console.info(listData.board[1]);
+  for (const each of listData.board) {
+    // console.info(each);
+    addList(each)
+
+  }
+}
+
+const data = new XMLHttpRequest();
+data.addEventListener("load", reqListener);
+data.open("GET", "assets/board.json");
+data.send();
 
