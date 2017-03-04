@@ -1,6 +1,6 @@
 
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
-  console.info(noteinfo.text);
+
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
   const editBtnElem = document.createElement('button');
@@ -21,11 +21,14 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   const labelDivElem = document.createElement('div');
   labelDivElem.setAttribute('class', 'lable-div');
   liNoteElem.appendChild(labelDivElem)
-  for ( const member of noteinfo.members) {
-    labelElem = document.createElement('span');
-    labelElem.setAttribute('class', 'label label-primary pull-right');
-    labelElem.innerHTML = member;
-    labelDivElem.appendChild(labelElem)
+  if (noteinfo) {
+    for ( const member of noteinfo.members) {
+      labelElem = document.createElement('span');
+      labelElem.setAttribute('class', 'label label-primary pull-right');
+      labelElem.innerHTML = member;
+      labelDivElem.appendChild(labelElem)
+  }
+
   }
   // console.info(liNoteElem);
 
