@@ -1,12 +1,11 @@
 
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
-
+  // console.info(noteinfo.text);
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
   const editBtnElem = document.createElement('button');
   editBtnElem.setAttribute('type', 'button');
   editBtnElem.setAttribute('class', 'btn btn-primary btn-xs note-edit-btn pull-right');
-
   const noteTextSpan = document.createElement('span');
   let noteText = '';
     if (!noteinfo) {
@@ -14,18 +13,20 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
     } else {
       noteTextSpan.textContent = noteinfo.text
     }
-    editBtnElem.textContent = 'Edit'
+    editBtnElem.textContent = 'Edit';
   liNoteElem.innerHTML = noteText;
-  liNoteElem.appendChild(editBtnElem)
-  liNoteElem.appendChild(noteTextSpan)
+  liNoteElem.appendChild(editBtnElem);
+  liNoteElem.appendChild(noteTextSpan);
   const labelDivElem = document.createElement('div');
   labelDivElem.setAttribute('class', 'lable-div');
-  liNoteElem.appendChild(labelDivElem)
+  liNoteElem.appendChild(labelDivElem);
+
   if (noteinfo) {
     for ( const member of noteinfo.members) {
-      labelElem = document.createElement('span');
+      const labelElem = document.createElement('span');
+      // console.info(member);
       labelElem.setAttribute('class', 'label label-primary pull-right');
-      labelElem.innerHTML = member;
+      labelElem.innerHTML = member.innerHTML;
       labelDivElem.appendChild(labelElem)
   }
 
@@ -102,7 +103,7 @@ function addList(listData) {
     cardTitle.innerHTML = listData.title;
 
     for (const task of listData.tasks) {
-      console.info(task);
+      // console.info(task);
      addNoteWTextAndLabels(noteUl, task)
     }
 
@@ -259,7 +260,7 @@ DeleteCard()
 function editNoteListener(noteElem) {
   const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
-  console.info(editBtnElem);
+  // console.info(editBtnElem);
   noteElem.addEventListener('mouseover' , function () {
     // console.info(editBtnElem.style.display);
     // alert(editBtnElem.style.display)
