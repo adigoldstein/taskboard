@@ -48,7 +48,6 @@ main {
 
 .notes-ul {
   overflow-y: auto;
-  /*position: relative;*/
   max-height: calc(100vh - 200px);
   border-right: 1px solid #F5F5F5;
   border-left: 1px solid #F5F5F5;
@@ -84,10 +83,12 @@ main {
   outline: 2px solid deepskyblue;
   display: none;
 }
+
 .panel-footer .add-note-btn {
   padding-left: 12%;
 }
-.add-note-btn , .panel-footer {
+
+.add-note-btn, .panel-footer {
   height: 100%;
   width: 100%;
   text-align: left;
@@ -101,6 +102,7 @@ main {
 .panel-footer:hover {
   background-color: #a2a3a5;
 }
+
 .panel-footer button {
   padding: 0;
   border: none;
@@ -132,7 +134,10 @@ main {
   padding: 30px 5px;
 }
 
-.add-list-li .add-list-btn ,.add-list-btn .panel-heading{
+.member-name-label {
+  padding: 5px;
+}
+.add-list-li .add-list-btn, .add-list-btn .panel-heading {
   height: 100%;
   width: 100%;
 }
@@ -140,6 +145,7 @@ main {
 .add-list-li .add-list-btn {
   cursor: pointer;
 }
+
 .add-list-li .panel-heading {
   /*padding: 0;*/
   /*height: 40px;*/
@@ -147,12 +153,22 @@ main {
 
 /********MODAL STUFF********/
 
-.modal-dialog {
-  z-index: 100;
- }
-.modal-content {
-  padding:15px ;
+.modal{
+  z-index: 1200;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  /*display: block;*/
+
 }
+
+.modal-content {
+  padding: 15px;
+}
+
 .modal-content h2 {
   display: inline-block;
   font-size: 18px;
@@ -168,6 +184,7 @@ main {
   width: 340px;
   resize: none;
 }
+
 .modal-content select {
   display: inline-block;
   width: 340px;
@@ -181,11 +198,18 @@ main {
   display: inline-block;
   vertical-align: top;
   border-radius: 5px;
+  padding: 5px;
 
 }
+
 .modal-content .checkbox label {
   display: block;
-  /*padding: 5px 0 ;*/
+  margin-left: 15px ;
 }
+
+.modal-content .del-note-btn {
+  margin: 10px;
+}
+
 
 

@@ -1,4 +1,3 @@
-
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
@@ -8,12 +7,12 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   const noteTextSpan = document.createElement('span');
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
-    if (!noteinfo) {
-      noteTextSpan.textContent = 'New note created...'
-    } else {
-      noteTextSpan.textContent = noteinfo.text
-    }
-    editBtnElem.textContent = 'Edit';
+  if (!noteinfo) {
+    noteTextSpan.textContent = 'New note created...'
+  } else {
+    noteTextSpan.textContent = noteinfo.text
+  }
+  editBtnElem.textContent = 'Edit';
   liNoteElem.innerHTML = noteText;
   liNoteElem.appendChild(editBtnElem);
   liNoteElem.appendChild(noteTextSpan);
@@ -23,13 +22,23 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   liNoteElem.appendChild(labelDivElem);
 
   if (noteinfo) {
-    for ( const member of noteinfo.members) {
+    for (const member of noteinfo.members) {
       const labelElem = document.createElement('span');
-      // console.info(member);
-      labelElem.setAttribute('class', 'label label-primary pull-right');
-      labelElem.innerHTML = member;
-      labelDivElem.appendChild(labelElem)
-  }
+      // get The first letter of each word
+      let abbrev = member.split(' ');
+      let nameholder = '';
+      for (part of abbrev) {
+        let nameIn = [];
+        nameIn = part[0];
+        nameholder += nameIn;
+      }
+
+      labelElem.textContent = nameholder;
+      labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label pull-right');
+      labelElem.setAttribute('title', member);
+
+      labelDivElem.appendChild(labelElem);
+    }
 
   }
   // console.info(liNoteElem);
@@ -41,12 +50,10 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
 
 function addCardBtnListener(btnToListen) {
 
-  btnToListen.addEventListener('click', function addCard (e) {
+  btnToListen.addEventListener('click', function addCard(e) {
 // console.info(e.target);
     const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
     addNoteWTextAndLabels(notesUlElem);
-
-
 
 
   })
@@ -105,10 +112,8 @@ function addList(listData) {
 
     for (const task of listData.tasks) {
       // console.info(task);
-     addNoteWTextAndLabels(noteUl, task)
+      addNoteWTextAndLabels(noteUl, task)
     }
-
-
 
 
   }
@@ -138,8 +143,6 @@ function addList(listData) {
   mainUlList.insertBefore(liListElem, addListLI);
 
 }
-
-
 
 
 // Change list name
@@ -203,7 +206,7 @@ function toggleMenu(menu) {
   const menuBtnElem = menu.querySelector('button');
   menuBtnElem.addEventListener('click', function () {
     const dropdownMenuElem = menu.querySelector('.dropdown-menu');
-    if (dropdownMenuElem.style.display === 'none' || !dropdownMenuElem.style.display ) {
+    if (dropdownMenuElem.style.display === 'none' || !dropdownMenuElem.style.display) {
       dropdownMenuElem.style.display = 'block';
     } else {
       dropdownMenuElem.style.display = 'none';
@@ -214,7 +217,8 @@ function toggleMenu(menu) {
 function dropdwonListener() {
   const dropdownElems = document.querySelectorAll('.dropdown');
   for (const dd of dropdownElems) {
-     toggleMenu(dd); {
+    toggleMenu(dd);
+    {
 
     }
   }
@@ -228,7 +232,7 @@ function deleteCardListener(deleteLiElem) {
   deleteLiElem.addEventListener('click', function () {
     const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
-    const deleteAnswer = confirm('Deleting ' +  cardToDeleteTitle + ' list. are you sure?');
+    const deleteAnswer = confirm('Deleting ' + cardToDeleteTitle + ' list. are you sure?');
     const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
 
     if (deleteAnswer) {
@@ -241,7 +245,6 @@ function deleteCardListener(deleteLiElem) {
   })
 
 
-
 }
 
 
@@ -249,7 +252,6 @@ function DeleteCard() {
   const deleteCardLiElems = document.querySelectorAll('.delete-card');
   for (const deleteLiElem of deleteCardLiElems) {
     deleteCardListener(deleteLiElem);
-
 
 
   }
@@ -262,14 +264,14 @@ function editNoteListener(noteElem) {
   const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
   // console.info(editBtnElem);
-  noteElem.addEventListener('mouseover' , function () {
+  noteElem.addEventListener('mouseover', function () {
     // console.info(editBtnElem.style.display);
     // alert(editBtnElem.style.display)
     if (editBtnElem.style.display = 'none' || (!editBtnElem.style.display)) {
       editBtnElem.style.display = 'block'
     }
   });
-  noteElem.addEventListener('mouseout' , function () {
+  noteElem.addEventListener('mouseout', function () {
     editBtnElem.style.display = 'none'
   })
 
@@ -281,34 +283,29 @@ for (const noteElem of noteElems) {
   editNoteListener(noteElem)
 }
 // Init the app - not running!
-function init() {
-  addCardExistBtn();
-
-  let panelHeadingElem = document.querySelectorAll('.content-card .panel-heading');
-
-  for (const item of panelHeadingElem) {
-    titleListenerToRename(item);
-    inputListener(item)
-
-
-  }
-}
+// function init() {
+//   addCardExistBtn();
+//
+//   let panelHeadingElem = document.querySelectorAll('.content-card .panel-heading');
+//
+//   for (const item of panelHeadingElem) {
+//     titleListenerToRename(item);
+//     inputListener(item)
+//
+//
+//   }
+// }
 
 // init();
 
+// add new list listener
 const addListBtn = document.querySelector('.add-list-btn');
 addListBtn.addEventListener('click', addList);
 
 
-
-
-
-
-
-
 // ****************Import JSON stuff****************
 let listData = {};
-function reqListener () {
+function reqListener() {
   // console.log(data.responseText);
   listData = JSON.parse(data.responseText);
   // console.info(listData.board[0]);
