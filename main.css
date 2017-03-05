@@ -48,7 +48,7 @@ main {
 
 .notes-ul {
   overflow-y: auto;
-  position: relative;
+  /*position: relative;*/
   max-height: calc(100vh - 200px);
   border-right: 1px solid #F5F5F5;
   border-left: 1px solid #F5F5F5;
@@ -56,21 +56,24 @@ main {
 
 }
 
-.note-edit-btn {
-  display: none;
-}
-
 .note {
   width: 300px;
-  /*max-height: 300px;*/
   min-height: 150px;
   border: 2px solid lightblue;
   border-radius: 10px;
   list-style: none;
   padding: 10px;
   margin: 10px auto;
-
+  position: relative;
 }
+
+.note-edit-btn {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
 .note-text-span {
   margin: 30px;
 
