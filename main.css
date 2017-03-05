@@ -67,6 +67,10 @@ main {
   margin: 10px auto;
 
 }
+.note-text-span {
+  margin: 30px;
+
+}
 
 .panel-heading input {
   width: 60%;
