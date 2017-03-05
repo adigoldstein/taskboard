@@ -1,9 +1,17 @@
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
+
   const editBtnElem = document.createElement('button');
   editBtnElem.setAttribute('type', 'button');
   editBtnElem.setAttribute('class', 'btn btn-primary btn-xs note-edit-btn pull-right');
+  editBtnElem.textContent = 'Edit';
+  editBtnElem.addEventListener('click' , function (e) {
+
+    const modalElem = document.querySelector('.modal ');
+    modalElem.style.display = 'block';
+
+  })
   const noteTextSpan = document.createElement('span');
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
@@ -12,7 +20,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   } else {
     noteTextSpan.textContent = noteinfo.text
   }
-  editBtnElem.textContent = 'Edit';
+
   liNoteElem.innerHTML = noteText;
   liNoteElem.appendChild(editBtnElem);
   liNoteElem.appendChild(noteTextSpan);
@@ -303,6 +311,23 @@ const addListBtn = document.querySelector('.add-list-btn');
 addListBtn.addEventListener('click', addList);
 
 
+
+//***************** modal stuff***********************
+function closeModal() {
+  const modalElem = document.querySelector('.modal');
+  modalElem.style.display = 'none'
+}
+
+const modalElem = document.querySelector('.modal');
+const xModalCloseBtn = modalElem.querySelector('.close');
+xModalCloseBtn.addEventListener('click', function () {
+  closeModal()
+})
+const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
+console.info(modalCloseBtn);
+modalCloseBtn.addEventListener('click', function () {
+  closeModal()
+})
 // ****************Import JSON stuff****************
 let listData = {};
 function reqListener() {
