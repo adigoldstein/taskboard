@@ -34,65 +34,133 @@
   </div>
 </nav>
 
-<!--********************** main Section**************************-->
 
-<main>
-  <ul class="card-list">
-    <li class="cards-li">
-      <div class="card content-card">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Dummy Card</h3>
-            <input type="text">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                      aria-expanded="true">
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li class="delete-card">Delete card</li>
-              </ul>
-            </div>
-          </div>
-          <ul class="notes-ul">
-            <li class="note">
-              <button type="button" class="btn btn-primary btn-xs server pull-right">Edit</button>
-              <span class="note-text">
-                Note item number 1 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit
-                repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis
-                quaerat
-                quibusdam, repellat sit vel voluptatem?
-              </span>
-              <div class="lable-div">
-                <span class="label label-primary pull-right">Moshe Datz</span>
-                <span class="label label-primary pull-right">Dudu Zar</span>
-              </div>
-            </li>
-            <li class="note">
-              Note item number 2 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit
-              repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis
-              quaerat
-              quibusdam, repellat sit vel voluptatem?
-            </li>
-            <li class="note">
-              Note item number 3 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit
-              repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis
-              quaerat
-              quibusdam, repellat sit vel voluptatem?
-            </li>
-            <li class="note">
-              Note item number 4 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit
-              repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis
-              quaerat
-              quibusdam, repellat sit vel voluptatem?
-            </li>
-          </ul>
-          <div class="panel-footer">
-            <button class="add-note-btn">Add Note..</button>
+<div tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit note</h4>
+      </div>
+      <div class="modal-body">
+        <div class="card-text">
+          <h2>Card text: </h2>
+          <textarea class="form-control" rows="6" ></textarea>
+        </div>
+        <div class="move-to">
+          <h2>Move to: </h2>
+          <select class="form-control">
+            <option>Blah</option>
+            <option>Yooo</option>
+            <option>wheee</option>
+          </select>
+        </div>
+        <div class="members">
+          <h2>Members: </h2>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="">Option one
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+            <label>
+              <input type="checkbox" value="">Option two
+            </label>
+
           </div>
         </div>
       </div>
-    </li>
+      <button type="button" class="btn btn-danger btn-lg">Delete note</button>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--********************** main Section**************************-->
+<main>
+
+  <ul class="card-list">
+    <!--<li class="cards-li">-->
+      <!--<div class="card content-card">-->
+        <!--<div class="panel panel-default">-->
+          <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title">Dummy Card</h3>-->
+            <!--<input type="text">-->
+            <!--<div class="dropdown">-->
+              <!--<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"-->
+                      <!--aria-expanded="true">-->
+                <!--<span class="caret"></span>-->
+              <!--</button>-->
+              <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">-->
+                <!--<li class="delete-card">Delete card</li>-->
+              <!--</ul>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<ul class="notes-ul">-->
+            <!--<li class="note">-->
+              <!--<button type="button" class="btn btn-primary btn-xs note-edit-btn pull-right">Edit</button>-->
+              <!--<span class="note-text">-->
+                <!--Note item number 1 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
+                <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
+                <!--quaerat-->
+                <!--quibusdam, repellat sit vel voluptatem?-->
+              <!--</span>-->
+              <!--<div class="lable-div">-->
+                <!--<span class="label label-primary pull-right">Moshe Datz</span>-->
+                <!--<span class="label label-primary pull-right">Dudu Zar</span>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="note">-->
+              <!--Note item number 2 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
+              <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
+              <!--quaerat-->
+              <!--quibusdam, repellat sit vel voluptatem?-->
+            <!--</li>-->
+            <!--<li class="note">-->
+              <!--Note item number 3 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
+              <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
+              <!--quaerat-->
+              <!--quibusdam, repellat sit vel voluptatem?-->
+            <!--</li>-->
+            <!--<li class="note">-->
+              <!--Note item number 4 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
+              <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
+              <!--quaerat-->
+              <!--quibusdam, repellat sit vel voluptatem?-->
+            <!--</li>-->
+          <!--</ul>-->
+          <!--<div class="panel-footer">-->
+            <!--<button class="add-note-btn">Add Note..</button>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</li>-->
     <!--*********Last column, add*************-->
     <li class="cards-li add-list-li">
       <div class="card">

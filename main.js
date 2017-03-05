@@ -1,6 +1,5 @@
 
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
-  // console.info(noteinfo.text);
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
   const editBtnElem = document.createElement('button');
@@ -26,7 +25,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   if (noteinfo) {
     for ( const member of noteinfo.members) {
       const labelElem = document.createElement('span');
-      console.info(member);
+      // console.info(member);
       labelElem.setAttribute('class', 'label label-primary pull-right');
       labelElem.innerHTML = member;
       labelDivElem.appendChild(labelElem)
@@ -43,7 +42,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
 function addCardBtnListener(btnToListen) {
 
   btnToListen.addEventListener('click', function addCard (e) {
-console.info(e.target);
+// console.info(e.target);
     const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
     addNoteWTextAndLabels(notesUlElem);
 
@@ -281,7 +280,7 @@ for (const noteElem of noteElems) {
   console.info(noteElem);
   editNoteListener(noteElem)
 }
-// Init the app
+// Init the app - not running!
 function init() {
   addCardExistBtn();
 
@@ -291,14 +290,14 @@ function init() {
     titleListenerToRename(item);
     inputListener(item)
 
-    const addListBtn = document.querySelector('.add-list-btn');
-    addListBtn.addEventListener('click', addList);
+
   }
 }
 
-init();
+// init();
 
-
+const addListBtn = document.querySelector('.add-list-btn');
+addListBtn.addEventListener('click', addList);
 
 
 
