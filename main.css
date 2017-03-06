@@ -35,6 +35,7 @@ main {
   padding-top: 10Px;
   display: flex;
   list-style: none;
+  display: none;
 }
 
 .card {
@@ -137,6 +138,7 @@ main {
 .member-name-label {
   padding: 5px;
 }
+
 .add-list-li .add-list-btn, .add-list-btn .panel-heading {
   height: 100%;
   width: 100%;
@@ -151,9 +153,40 @@ main {
   /*height: 40px;*/
 }
 
+/********Members section********/
+
+.members-area h1 {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.list-group-item {
+  width: 400px;
+}
+
+.member-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.add-member-input {
+  width: 200px;
+  display: inline-block;
+}
+
+.member-li button {
+  margin-top: -5px;
+  margin-left: 5px;
+  display: none;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
 /********MODAL STUFF********/
 
-.modal{
+.modal {
   z-index: 1200;
   position: fixed;
   top: 0;
@@ -204,7 +237,7 @@ main {
 
 .modal-content .checkbox label {
   display: block;
-  margin-left: 15px ;
+  margin-left: 15px;
 }
 
 .modal-content .del-note-btn {

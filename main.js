@@ -290,6 +290,55 @@ for (const noteElem of noteElems) {
   console.info(noteElem);
   editNoteListener(noteElem)
 }
+
+// members section********************************************************************
+
+const addMemberTamplet = `<span class="member-name"></span>
+    <button type="button" class="btn btn-danger pull-right">Delete</button>
+    <button type="button" class="btn btn-warning pull-right">Edit</button>`;
+
+function createNewMember(name) {
+  const membersListElem = document.querySelector('.members-list');
+  const addMemberLiElem = document.querySelector('.add-member-li');
+  const newMemberToAdd = document.createElement('li')
+
+  newMemberToAdd.setAttribute('class', 'list-group-item member-li');
+  newMemberToAdd.innerHTML = addMemberTamplet;
+  newMemberToAdd.querySelector('span').textContent = name;
+
+  newMemberToAdd.addEventListener('mouseover', function (e) {
+    // console.info(e.target);
+    const buttonsElems = newMemberToAdd.querySelectorAll('button');
+    for (const btn of buttonsElems) {
+      btn.style.display = 'inline-block'
+    }
+
+
+  })
+  newMemberToAdd.addEventListener('mouseout', function (e) {
+    // console.info(e.target);
+    const buttonsElems = newMemberToAdd.querySelectorAll('button');
+    for (const btn of buttonsElems) {
+      btn.style.display = 'none';
+    }
+
+
+  })
+
+
+  membersListElem.insertBefore(newMemberToAdd, addMemberLiElem);
+
+
+}
+
+const addMemberBtn = document.querySelector('.add-member-btn');
+console.info(addMemberBtn);
+addMemberBtn.addEventListener('click', function (e) {
+  const inputElem = e.target.closest('.form-group').querySelector('input');
+  const newMemberName = (inputElem.value);
+  createNewMember(newMemberName)
+})
+
 // Init the app - not running!
 // function init() {
 //   addCardExistBtn();
@@ -324,7 +373,7 @@ xModalCloseBtn.addEventListener('click', function () {
   closeModal()
 })
 const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
-console.info(modalCloseBtn);
+// console.info(modalCloseBtn);
 modalCloseBtn.addEventListener('click', function () {
   closeModal()
 })
@@ -347,3 +396,20 @@ data.addEventListener("load", reqListener);
 data.open("GET", "assets/board.json");
 data.send();
 
+let listMember = {};
+function reqListener() {
+  // console.log(data.responseText);
+  listMember = JSON.parse(data.responseText);
+  // console.info(listData.board[0]);
+  // console.info(listData.board[1]);
+  for (const each of listData.members) {
+    // console.info(each);
+    addList(each)
+
+  }
+}
+
+const membersData = new XMLHttpRequest();
+data.addEventListener("load", reqListener);
+data.open("GET", "assets/members.json");
+data.send();
