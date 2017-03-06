@@ -398,13 +398,15 @@ data.send();
 
 let listMember = {};
 function reqListener() {
-  // console.log(data.responseText);
+  console.log(data.responseText);
+  console.info('dsdsds');
   listMember = JSON.parse(data.responseText);
-  // console.info(listData.board[0]);
+  // console.info(listMember);
+  // console.info(listMember.members[0]);
   // console.info(listData.board[1]);
-  for (const each of listData.members) {
-    // console.info(each);
-    addList(each)
+  for (const each of listMember.members) {
+    console.info(each.name);
+    createNewMember(each.name);
 
   }
 }
