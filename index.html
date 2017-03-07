@@ -63,23 +63,13 @@
 
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
-
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a href="#"><img src="assets/taskboard%20logo.svg" alt="Taskboard Logo" width="40px" height="40px">
-      </a>
-
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+      <a href="#"><img src="assets/taskboard%20logo.svg" alt="Taskboard Logo" width="40px" height="40px"></a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Board <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="#cards-section">Board <span class="sr-only">(current)</span></a></li>
         <li><a href="#">Members</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -90,92 +80,34 @@
 <!--********************** main Section**************************-->
 <main>
 
-  <ul class="card-list">
-    <!--<li class="cards-li">-->
-    <!--<div class="card content-card">-->
-    <!--<div class="panel panel-default">-->
-    <!--<div class="panel-heading">-->
-    <!--<h3 class="panel-title">Dummy Card</h3>-->
-    <!--<input type="text">-->
-    <!--<div class="dropdown">-->
-    <!--<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"-->
-    <!--aria-expanded="true">-->
-    <!--<span class="caret"></span>-->
-    <!--</button>-->
-    <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">-->
-    <!--<li class="delete-card">Delete card</li>-->
-    <!--</ul>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<ul class="notes-ul">-->
-    <!--<li class="note">-->
-    <!--<button type="button" class="btn btn-primary btn-xs note-edit-btn pull-right">Edit</button>-->
-    <!--<span class="note-text">-->
-    <!--Note item number 1 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
-    <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
-    <!--quaerat-->
-    <!--quibusdam, repellat sit vel voluptatem?-->
-    <!--</span>-->
-    <!--<div class="lable-div">-->
-    <!--<span class="label label-primary pull-right">Moshe Datz</span>-->
-    <!--<span class="label label-primary pull-right">Dudu Zar</span>-->
-    <!--</div>-->
-    <!--</li>-->
-    <!--<li class="note">-->
-    <!--Note item number 2 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
-    <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
-    <!--quaerat-->
-    <!--quibusdam, repellat sit vel voluptatem?-->
-    <!--</li>-->
-    <!--<li class="note">-->
-    <!--Note item number 3 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
-    <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
-    <!--quaerat-->
-    <!--quibusdam, repellat sit vel voluptatem?-->
-    <!--</li>-->
-    <!--<li class="note">-->
-    <!--Note item number 4 - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium magnam odit-->
-    <!--repellat tempora! A, aliquam distinctio dolore, enim error facilis illum libero nobis perferendis-->
-    <!--quaerat-->
-    <!--quibusdam, repellat sit vel voluptatem?-->
-    <!--</li>-->
-    <!--</ul>-->
-    <!--<div class="panel-footer">-->
-    <!--<button class="add-note-btn">Add Note..</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</li>-->
-    <!--*********Last column, add*************-->
-    <li class="cards-li add-list-li">
-      <div class="card">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title add-list-btn">Add list..</h3>
+  <section id="cards-section">
+    <ul class="card-list">
+      <li class="cards-li add-list-li">
+        <div class="card">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title add-list-btn">Add list..</h3>
+            </div>
           </div>
         </div>
-      </div>
-    </li>
-  </ul>
-
-
-  <section class="members-area">
+      </li>
+    </ul>
+  </section>
+  <section id="members-section">
     <h1>Taskboard Members</h1>
     <ul class="list-group members-list">
-      <li class="list-group-item member-li">
-        <span class="member-name"></span>
-        <button type="button" class="btn btn-danger pull-right">Delete</button>
-        <button type="button" class="btn btn-warning pull-right">Edit</button>
-
-      </li>
-
       <li class="list-group-item add-member-li">
         <div class="form-group">
-          <input type="text" class="form-control add-member-input"  placeholder="Add new member">
+          <input type="text" class="form-control add-member-input" placeholder="Add new member">
           <button type="button" class="btn btn-primary add-member-btn">Add Member</button>
         </div>
       </li>
     </ul>
+  </section>
+
+
+  <section class="members-area">
+
 
   </section>
 

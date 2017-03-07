@@ -298,7 +298,8 @@ const addMemberTamplet = `<span class="member-name"></span>
      <input type="email" class="form-control edit-member-input"  >
     <button type="button" class="btn btn-danger btn-to-show delete-member-btn pull-right">Delete</button>
     <button type="button" class="btn btn-warning btn-to-show edit-member-btn pull-right">Edit</button>
-    <button type="button" class="btn btn-default cancel-btn pull-right">Cancel</button>`;
+    <button type="button" class="btn btn-default cancel-btn pull-right">Cancel</button>
+<button type="button" class="btn btn-success cancel-btn pull-right">Save</button>`;
 
 function createNewMember(name) {
   const membersListElem = document.querySelector('.members-list');
@@ -310,23 +311,23 @@ function createNewMember(name) {
   newMemberToAdd.querySelector('span').textContent = name;
 
 
-  // Hide and show buttons on hover
-
-  newMemberToAdd.addEventListener('mouseover', function (e) {
-    // console.info(e.target);
-    const buttonsElems = newMemberToAdd.querySelectorAll('.btn-to-show');
-    for (const btn of buttonsElems) {
-      btn.style.display = 'inline-block'
-    }
-
-  })
-  newMemberToAdd.addEventListener('mouseout', function (e) {
-    // console.info(e.target);
-    const buttonsElems = newMemberToAdd.querySelectorAll('button');
-    for (const btn of buttonsElems) {
-      btn.style.display = 'none';
-    }
-  })
+  // // Hide and show buttons on hover
+  //
+  // newMemberToAdd.addEventListener('mouseover', function (e) {
+  //   // console.info(e.target);
+  //   const buttonsElems = newMemberToAdd.querySelectorAll('.btn-to-show');
+  //   for (const btn of buttonsElems) {
+  //     btn.style.display = 'inline-block'
+  //   }
+  //
+  // })
+  // newMemberToAdd.addEventListener('mouseout', function (e) {
+  //   // console.info(e.target);
+  //   const buttonsElems = newMemberToAdd.querySelectorAll('button');
+  //   for (const btn of buttonsElems) {
+  //     btn.style.display = 'none';
+  //   }
+  // })
   // Delete member
   const deleteMemberBtn = newMemberToAdd.querySelector('.delete-member-btn');
   // console.info(deleteMemberBtn);
@@ -335,12 +336,13 @@ function createNewMember(name) {
   })
   // edit member
   const editMemberBtn = newMemberToAdd.querySelector('.edit-member-btn');
-  editMemberBtn.addEventListener('click', function (e) {
+    editMemberBtn.addEventListener('click', function (e) {
     editMemberBtn.style.display = 'none';
     const liMemberElem = e.target.closest('.member-li');
     const memberNameSpan = liMemberElem.querySelector('.member-name');
     const editMemberInputElem = liMemberElem.querySelector('.edit-member-input')
     const cancelBtnElem = liMemberElem.querySelector('.cancel-btn');
+
     cancelBtnElem.style.display = 'inline-block';
     editMemberInputElem.value = memberNameSpan.innerHTML;
     editMemberInputElem.style.display = 'inline-block';
@@ -357,6 +359,7 @@ const addMemberBtn = document.querySelector('.add-member-btn');
 addMemberBtn.addEventListener('click', function (e) {
   const inputElem = e.target.closest('.form-group').querySelector('input');
   const newMemberName = (inputElem.value);
+
   createNewMember(newMemberName)
 })
 
@@ -399,15 +402,11 @@ modalCloseBtn.addEventListener('click', function () {
 })
 // ****************Import JSON stuff****************
 let listData = {};
-function reqListener() {
-  // console.log(data.responseText);
-  listData = JSON.parse(data.responseText);
-  // console.info(listData.board[0]);
-  // console.info(listData.board[1]);
-  for (const each of listData.board) {
-    // console.info(each);
-    addList(each)
 
+function reqListener() {
+  listData = JSON.parse(data.responseText);
+  for (const each of listData.board) {
+    addList(each)
   }
 }
 
@@ -421,13 +420,10 @@ data.send();
 
 
 let listMember = {};
+
 function reqListener1() {
-  // console.log(membersData.responseText);
-  // console.info('dsdsds');
+
   listMember = JSON.parse(membersData.responseText);
-  // console.info(listMember);
-  // console.info(listMember.members[0]);
-  // console.info(listData.board[1]);
   for (const each of listMember.members) {
     // console.info(each.name);
     createNewMember(each.name);
