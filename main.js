@@ -1,3 +1,54 @@
+// Create HTML skeleton dynamic
+function createBoard() {
+  const boardTamplet = `<ul class="card-list">
+      <li class="cards-li add-list-li">
+        <div class="card">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title add-list-btn">Add list..</h3>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>`;
+
+  const boardSection = document.createElement('section');
+  const mainElem =document.querySelector('main');
+  console.info(mainElem);
+  boardSection.id = 'board' ;
+  boardSection.innerHTML = boardTamplet;
+  console.info(boardSection);
+  mainElem.appendChild(boardSection)
+
+}
+createBoard()
+window.location.hash = 'board';
+
+
+function createMembers() {
+  const membersTamplet = `<section id="members">
+    <h1>Taskboard Members</h1>
+    <ul class="list-group members-list">
+      <li class="list-group-item add-member-li">
+        <div class="form-group">
+          <input type="text" class="form-control add-member-input" placeholder="Add new member">
+          <button type="button" class="btn btn-primary add-member-btn">Add Member</button>
+        </div>
+      </li>
+    </ul>
+  </section>`;
+  const membersSection = document.createElement('section');
+  const mainElem =document.querySelector('main');
+  console.info(mainElem);
+  membersSection.id = 'members' ;
+  membersSection.innerHTML = membersTamplet;
+  // console.info(boardSection);
+  mainElem.appendChild(membersSection)
+
+}
+
+
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
