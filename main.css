@@ -35,7 +35,7 @@ main {
   padding-top: 10Px;
   display: flex;
   list-style: none;
-  display: none;
+  /*display: none;*/
 }
 
 .card {
@@ -161,7 +161,7 @@ main {
 }
 
 .list-group-item {
-  width: 400px;
+  width: 600px;
 }
 
 .member-name {
@@ -169,10 +169,16 @@ main {
   font-weight: bold;
 }
 
+.edit-member-input {
+  width: 250px;
+  display: none;
+}
+
 .add-member-input {
   width: 200px;
   display: inline-block;
 }
+
 
 .member-li button {
   margin-top: -5px;

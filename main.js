@@ -6,7 +6,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
   editBtnElem.setAttribute('type', 'button');
   editBtnElem.setAttribute('class', 'btn btn-primary btn-xs note-edit-btn pull-right');
   editBtnElem.textContent = 'Edit';
-  editBtnElem.addEventListener('click' , function (e) {
+  editBtnElem.addEventListener('click', function (e) {
 
     const modalElem = document.querySelector('.modal ');
     modalElem.style.display = 'block';
@@ -102,6 +102,7 @@ const tampletLi = `
     </li>
   `;
 function addList(listData) {
+  // console.info(listData);
   const mainUlList = document.querySelector('.card-list');
   const addListLI = document.querySelector('.add-list-li');
 
@@ -294,8 +295,10 @@ for (const noteElem of noteElems) {
 // members section********************************************************************
 
 const addMemberTamplet = `<span class="member-name"></span>
-    <button type="button" class="btn btn-danger pull-right">Delete</button>
-    <button type="button" class="btn btn-warning pull-right">Edit</button>`;
+     <input type="email" class="form-control edit-member-input"  >
+    <button type="button" class="btn btn-danger btn-to-show delete-member-btn pull-right">Delete</button>
+    <button type="button" class="btn btn-warning btn-to-show edit-member-btn pull-right">Edit</button>
+    <button type="button" class="btn btn-default cancel-btn pull-right">Cancel</button>`;
 
 function createNewMember(name) {
   const membersListElem = document.querySelector('.members-list');
@@ -306,13 +309,15 @@ function createNewMember(name) {
   newMemberToAdd.innerHTML = addMemberTamplet;
   newMemberToAdd.querySelector('span').textContent = name;
 
+
+  // Hide and show buttons on hover
+
   newMemberToAdd.addEventListener('mouseover', function (e) {
     // console.info(e.target);
-    const buttonsElems = newMemberToAdd.querySelectorAll('button');
+    const buttonsElems = newMemberToAdd.querySelectorAll('.btn-to-show');
     for (const btn of buttonsElems) {
       btn.style.display = 'inline-block'
     }
-
 
   })
   newMemberToAdd.addEventListener('mouseout', function (e) {
@@ -321,18 +326,34 @@ function createNewMember(name) {
     for (const btn of buttonsElems) {
       btn.style.display = 'none';
     }
-
-
   })
-
-
+  // Delete member
+  const deleteMemberBtn = newMemberToAdd.querySelector('.delete-member-btn');
+  // console.info(deleteMemberBtn);
+  deleteMemberBtn.addEventListener('click', function (e) {
+    // ***********************************************************need to do!!!! delete member
+  })
+  // edit member
+  const editMemberBtn = newMemberToAdd.querySelector('.edit-member-btn');
+  editMemberBtn.addEventListener('click', function (e) {
+    editMemberBtn.style.display = 'none';
+    const liMemberElem = e.target.closest('.member-li');
+    const memberNameSpan = liMemberElem.querySelector('.member-name');
+    const editMemberInputElem = liMemberElem.querySelector('.edit-member-input')
+    const cancelBtnElem = liMemberElem.querySelector('.cancel-btn');
+    cancelBtnElem.style.display = 'inline-block';
+    editMemberInputElem.value = memberNameSpan.innerHTML;
+    editMemberInputElem.style.display = 'inline-block';
+    editMemberInputElem.focus();
+    memberNameSpan.style.display = 'none';
+  })
   membersListElem.insertBefore(newMemberToAdd, addMemberLiElem);
 
 
 }
 
 const addMemberBtn = document.querySelector('.add-member-btn');
-console.info(addMemberBtn);
+// console.info(addMemberBtn);
 addMemberBtn.addEventListener('click', function (e) {
   const inputElem = e.target.closest('.form-group').querySelector('input');
   const newMemberName = (inputElem.value);
@@ -358,7 +379,6 @@ addMemberBtn.addEventListener('click', function (e) {
 // add new list listener
 const addListBtn = document.querySelector('.add-list-btn');
 addListBtn.addEventListener('click', addList);
-
 
 
 //***************** modal stuff***********************
@@ -396,22 +416,26 @@ data.addEventListener("load", reqListener);
 data.open("GET", "assets/board.json");
 data.send();
 
+
+// **************************************
+
+
 let listMember = {};
-function reqListener() {
-  console.log(data.responseText);
-  console.info('dsdsds');
-  listMember = JSON.parse(data.responseText);
+function reqListener1() {
+  // console.log(membersData.responseText);
+  // console.info('dsdsds');
+  listMember = JSON.parse(membersData.responseText);
   // console.info(listMember);
   // console.info(listMember.members[0]);
   // console.info(listData.board[1]);
   for (const each of listMember.members) {
-    console.info(each.name);
+    // console.info(each.name);
     createNewMember(each.name);
 
   }
 }
 
 const membersData = new XMLHttpRequest();
-data.addEventListener("load", reqListener);
-data.open("GET", "assets/members.json");
-data.send();
+membersData.addEventListener("load", reqListener1);
+membersData.open("GET", "assets/members.json");
+membersData.send();
