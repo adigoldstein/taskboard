@@ -15,15 +15,38 @@ function createBoard() {
 
   const boardSection = document.createElement('section');
   const mainElem =document.querySelector('main');
-  console.info(mainElem);
+  // console.info(mainElem);
   boardSection.id = 'board' ;
   boardSection.innerHTML = boardTamplet;
-  console.info(boardSection);
+  // console.info(boardSection);
   mainElem.appendChild(boardSection)
 
 }
 createBoard()
 window.location.hash = 'board';
+
+window.addEventListener('hashchange', (event) => {
+  console.info(event);
+ if(window.location.hash === '#members'){
+   const membersElem = document.querySelector('#members');
+   const boardElem = document.querySelector('#board');
+   membersElem.style.display = 'block';
+   boardElem.style.display = 'none';
+ }
+    if(window.location.hash === '#board'){
+      const membersElem = document.querySelector('#members');
+      const boardElem = document.querySelector('#board');
+      membersElem.style.display = 'none';
+      boardElem.style.display = 'block';
+    }
+
+}
+
+
+
+
+);
+
 
 
 function createMembers() {
@@ -40,13 +63,13 @@ function createMembers() {
   </section>`;
   const membersSection = document.createElement('section');
   const mainElem =document.querySelector('main');
-  console.info(mainElem);
   membersSection.id = 'members' ;
   membersSection.innerHTML = membersTamplet;
-  // console.info(boardSection);
-  mainElem.appendChild(membersSection)
+  membersSection.style.display = 'none'
+  mainElem.appendChild(membersSection);
 
 }
+createMembers()
 
 
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
