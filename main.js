@@ -1,6 +1,34 @@
+const appData = {
+  lists: [],
+  members: []
+};
+getBoardJSON();
+// getMembersJSON();
+// console.info(appData);
+
 // Create HTML skeleton dynamic
+
+function createContentByHash() {
+  console.info(window.location.hash);
+  if (window.location.hash === '#members') {
+    createMembers();
+
+
+  }
+
+  if (window.location.hash === '#board' || window.location.hash === '') {
+    createBoard();
+  }
+}
+window.addEventListener('hashchange', (event) => {
+    createContentByHash()
+
+  }
+);
+
 function createBoard() {
-  const boardTamplet = `<ul class="card-list">
+  const boardTamplet = `<section id="board>
+    "<ul class="card-list">
       <li class="cards-li add-list-li">
         <div class="card">
           <div class="panel panel-default">
@@ -13,40 +41,22 @@ function createBoard() {
     </ul>
   </section>`;
 
-  const boardSection = document.createElement('section');
-  const mainElem =document.querySelector('main');
+  const mainElem = document.querySelector('main');
   // console.info(mainElem);
-  boardSection.id = 'board' ;
-  boardSection.innerHTML = boardTamplet;
   // console.info(boardSection);
-  mainElem.appendChild(boardSection)
+  // add new list listener
+
+  mainElem.innerHTML = boardTamplet;
+
+  const addListBtn = document.querySelector('.add-list-btn');
+  addListBtn.addEventListener('click', addList);
+  // console.info(appData);
+  // console.info(appData.lists);
+  for (const list of appData.lists) {
+    addList(list);
+  }
 
 }
-createBoard()
-window.location.hash = 'board';
-
-window.addEventListener('hashchange', (event) => {
-  console.info(event);
- if(window.location.hash === '#members'){
-   const membersElem = document.querySelector('#members');
-   const boardElem = document.querySelector('#board');
-   membersElem.style.display = 'block';
-   boardElem.style.display = 'none';
- }
-    if(window.location.hash === '#board'){
-      const membersElem = document.querySelector('#members');
-      const boardElem = document.querySelector('#board');
-      membersElem.style.display = 'none';
-      boardElem.style.display = 'block';
-    }
-
-}
-
-
-
-
-);
-
 
 
 function createMembers() {
@@ -61,15 +71,14 @@ function createMembers() {
       </li>
     </ul>
   </section>`;
-  const membersSection = document.createElement('section');
-  const mainElem =document.querySelector('main');
-  membersSection.id = 'members' ;
-  membersSection.innerHTML = membersTamplet;
-  membersSection.style.display = 'none'
-  mainElem.appendChild(membersSection);
+
+  const mainElem = document.querySelector('main');
+
+  mainElem.innerHTML = membersTamplet;
+
 
 }
-createMembers()
+// createMembers()
 
 
 function addNoteWTextAndLabels(notesUlElem, noteinfo) {
@@ -123,7 +132,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
     }
 
   }
-  // console.info(liNoteElem);
+
 
   editNoteListener(liNoteElem)
   notesUlElem.appendChild(liNoteElem);
@@ -133,7 +142,7 @@ function addNoteWTextAndLabels(notesUlElem, noteinfo) {
 function addCardBtnListener(btnToListen) {
 
   btnToListen.addEventListener('click', function addCard(e) {
-// console.info(e.target);
+
     const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
     addNoteWTextAndLabels(notesUlElem);
 
@@ -175,6 +184,7 @@ const tampletLi = `
       </div>
     </li>
   `;
+
 function addList(listData) {
   // console.info(listData);
   const mainUlList = document.querySelector('.card-list');
@@ -410,7 +420,7 @@ function createNewMember(name) {
   })
   // edit member
   const editMemberBtn = newMemberToAdd.querySelector('.edit-member-btn');
-    editMemberBtn.addEventListener('click', function (e) {
+  editMemberBtn.addEventListener('click', function (e) {
     editMemberBtn.style.display = 'none';
     const liMemberElem = e.target.closest('.member-li');
     const memberNameSpan = liMemberElem.querySelector('.member-name');
@@ -430,12 +440,15 @@ function createNewMember(name) {
 
 const addMemberBtn = document.querySelector('.add-member-btn');
 // console.info(addMemberBtn);
-addMemberBtn.addEventListener('click', function (e) {
-  const inputElem = e.target.closest('.form-group').querySelector('input');
-  const newMemberName = (inputElem.value);
+function addMemberEventListener() {
+  addMemberBtn.addEventListener('click', function (e) {
+    const inputElem = e.target.closest('.form-group').querySelector('input');
+    const newMemberName = (inputElem.value);
 
-  createNewMember(newMemberName)
-})
+    createNewMember(newMemberName)
+  })
+}
+
 
 // Init the app - not running!
 // function init() {
@@ -452,10 +465,6 @@ addMemberBtn.addEventListener('click', function (e) {
 // }
 
 // init();
-
-// add new list listener
-const addListBtn = document.querySelector('.add-list-btn');
-addListBtn.addEventListener('click', addList);
 
 
 //***************** modal stuff***********************
@@ -475,37 +484,43 @@ modalCloseBtn.addEventListener('click', function () {
   closeModal()
 })
 // ****************Import JSON stuff****************
-let listData = {};
+function getBoardJSON() {
+  let listData = {};
 
-function reqListener() {
-  listData = JSON.parse(data.responseText);
-  for (const each of listData.board) {
-    addList(each)
+  function reqListener() {
+    listData = JSON.parse(data.responseText);
+    appData.lists = listData.board;
+    console.info(appData);
+
+    createContentByHash()
   }
-}
 
-const data = new XMLHttpRequest();
-data.addEventListener("load", reqListener);
-data.open("GET", "assets/board.json");
-data.send();
+  const data = new XMLHttpRequest();
+  data.addEventListener("load", reqListener);
+  data.open("GET", "assets/board.json");
+  data.send();
+}
 
 
 // **************************************
 
 
-let listMember = {};
+function getMembersJSON() {
 
-function reqListener1() {
+  let listMember = {};
 
-  listMember = JSON.parse(membersData.responseText);
-  for (const each of listMember.members) {
-    // console.info(each.name);
-    createNewMember(each.name);
+  function reqListenerMembers() {
+    listMember = JSON.parse(membersData.responseText);
+    appData.members = listMember.members
+    // console.info(appData);
 
+    createContentByHash()
   }
-}
 
-const membersData = new XMLHttpRequest();
-membersData.addEventListener("load", reqListener1);
-membersData.open("GET", "assets/members.json");
-membersData.send();
+  const membersData = new XMLHttpRequest();
+
+  membersData.addEventListener("load", reqListenerMembers);
+  membersData.open("GET", "assets/members.json");
+  membersData.send();
+
+}
