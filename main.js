@@ -3,13 +3,11 @@ const appData = {
   members: []
 };
 getBoardJSON();
-// getMembersJSON();
-// console.info(appData);
+getMembersJSON()
 
 // Create HTML skeleton dynamic
 
 function createContentByHash() {
-  console.info(window.location.hash);
   if (window.location.hash === '#members') {
     createMembers();
 
@@ -77,6 +75,9 @@ function createMembers() {
   mainElem.innerHTML = membersTamplet;
 
 
+for (const member of appData.members) {
+  createNewMember(member.name)
+}
 }
 // createMembers()
 
@@ -150,14 +151,14 @@ function addCardBtnListener(btnToListen) {
   })
 }
 
-function addCardExistBtn() {
-
-  const addNoteBtns = document.querySelectorAll('.add-note-btn');
-
-  for (const button of addNoteBtns) {
-    addCardBtnListener(button);
-  }
-}
+// function addCardExistBtn() {
+//
+//   const addNoteBtns = document.querySelectorAll('.add-note-btn');
+//
+//   for (const button of addNoteBtns) {
+//     addCardBtnListener(button);
+//   }
+// }
 const tampletLi = `
     <li class="cards-li">
       <div class="card content-card">
@@ -484,15 +485,28 @@ modalCloseBtn.addEventListener('click', function () {
   closeModal()
 })
 // ****************Import JSON stuff****************
+function areJSONSHeher() {
+
+  if (appData.members.length && appData.lists.length) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 function getBoardJSON() {
   let listData = {};
 
   function reqListener() {
     listData = JSON.parse(data.responseText);
     appData.lists = listData.board;
-    console.info(appData);
+    // console.info(appData);
 
-    createContentByHash()
+    if (areJSONSHeher()) {
+      createContentByHash()
+
+    }
   }
 
   const data = new XMLHttpRequest();
@@ -514,7 +528,10 @@ function getMembersJSON() {
     appData.members = listMember.members
     // console.info(appData);
 
-    createContentByHash()
+    if (areJSONSHeher()) {
+      createContentByHash()
+    }
+
   }
 
   const membersData = new XMLHttpRequest();
