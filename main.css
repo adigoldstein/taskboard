@@ -164,6 +164,11 @@ main {
   width: 600px;
 }
 
+.member-li:hover .btn-to-show-on-hover {
+  display: inline-block;
+
+}
+
 .member-name {
   font-size: 18px;
   font-weight: bold;
