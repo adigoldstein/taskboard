@@ -93,12 +93,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   editBtnElem.setAttribute('type', 'button');
   editBtnElem.setAttribute('class', 'btn btn-primary btn-xs note-edit-btn pull-right');
   editBtnElem.textContent = 'Edit';
-  editBtnElem.addEventListener('click', function (e) {
 
-    const modalElem = document.querySelector('.modal ');
-    modalElem.style.display = 'block';
-
-  })
   const noteTextSpan = document.createElement('span');
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
@@ -155,7 +150,19 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
   }
 
+  editBtnElem.addEventListener('click', function (e) {
 
+    const modalElem = document.querySelector('.modal ');
+    modalElem.style.display = 'block';
+
+    // fill modal with relevant content*********
+    const noteElem = e.target.closest('.note');
+    // console.info(modalElem);
+    console.info(noteElem);
+    const modalCardText = modalElem.querySelector('.card-text');
+    // console.info(modalCardText);
+    console.info(noteElem.closest('.note-text-span'));
+  })
   editNoteListener(liNoteElem)
   notesUlElem.appendChild(liNoteElem);
 }
