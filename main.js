@@ -8,6 +8,7 @@ getMembersJSON();
 // Create HTML skeleton dynamic
 
 function createContentByHash() {
+  console.info('createContenctByHash');
   if (window.location.hash === '#members') {
     createMembers();
 
@@ -25,6 +26,7 @@ window.addEventListener('hashchange', (event) => {
 );
 
 function createBoard() {
+  console.info('CreateCardboard');
   const boardTamplet = `<section id="board>
     "<ul class="card-list">
       <li class="cards-li add-list-li">
@@ -58,6 +60,7 @@ function createBoard() {
 
 
 function createMembers() {
+  console.info('createMember');
   const membersTamplet = `<section id="members">
     <h1>Taskboard Members</h1>
     <ul class="list-group members-list">
@@ -82,6 +85,7 @@ function createMembers() {
 
 
 function addNoteWTextAndLabels(notesUlElem, noteInfo) {
+  console.info('addNoteW....');
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
 
@@ -133,6 +137,22 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       labelDivElem.appendChild(labelElem);
     }
 
+  } else {
+    // add to appData
+    console.info(liNoteElem);
+    const listTitleText = notesUlElem.closest('.panel').querySelector('.panel-title').innerHTML;
+    console.info(appData.lists);
+    let listElemToAddNote = {};
+    for (const obj of appData.lists) {
+      if (obj.title === listTitleText) {
+        console.info(obj.tasks);
+        obj.tasks.push({members : [],
+        text: 'New note created...'})
+        console.info(obj.tasks);
+
+      }
+    }
+
   }
 
 
@@ -142,6 +162,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
 
 function addCardBtnListener(btnToListen) {
+  console.info('addCardBtnListener');
 
   btnToListen.addEventListener('click', function addCard(e) {
 
@@ -188,6 +209,7 @@ const tampletLi = `
   `;
 
 function addList(listData) {
+  console.info('addList');
   // console.info(listData);
   const mainUlList = document.querySelector('.card-list');
   const addListLI = document.querySelector('.add-list-li');
@@ -214,8 +236,8 @@ function addList(listData) {
     // add to appData
     // console.info(appData.lists);
     const listToAddToAppData = {
-      title : 'New list inserted' ,
-      tasks :[]
+      title: 'New list inserted',
+      tasks: []
     }
     // console.info(listToAddToAppData);
     appData.lists.push(listToAddToAppData);
@@ -252,6 +274,7 @@ function addList(listData) {
 
 // Change list name
 function hideH3FocusInput(e) {
+  console.info('hideNfoucuseInput');
   const evPressed = e.target;
   const item = evPressed.closest('.card');
 
@@ -267,12 +290,14 @@ function hideH3FocusInput(e) {
 }
 
 function titleListenerToRename(item) {
+  console.info('titleListenertoRename');
   const h3Elem = item.querySelector('h3');
 
   h3Elem.addEventListener('click', hideH3FocusInput);
 
 }
-function editListTitleAndUpdateAppdata(h3Elem,inputElem) {
+function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
+  console.info('editListTitleAndUpdateData');
   const oldTitle = h3Elem.textContent;
   console.info(oldTitle);
   h3Elem.textContent = inputElem.value;
@@ -288,6 +313,7 @@ function editListTitleAndUpdateAppdata(h3Elem,inputElem) {
 }
 
 function inputListener(item) {
+  console.info('inputListener');
   const inputElem = item.querySelector('input');
   const h3Elem = item.querySelector('h3');
 
@@ -298,8 +324,8 @@ function inputListener(item) {
       if (inputElem.value === '') {
         inputElem.value = h3Elem.innerHTML;
       }
-console.info('1');
-   editListTitleAndUpdateAppdata(h3Elem,inputElem);
+      console.info('1');
+      editListTitleAndUpdateAppdata(h3Elem, inputElem);
     }
   })
 
@@ -309,8 +335,8 @@ console.info('1');
       inputElem.value = h3Elem.innerHTML;
     }
 
-console.info('2');
-   editListTitleAndUpdateAppdata(h3Elem,inputElem);
+    console.info('2');
+    editListTitleAndUpdateAppdata(h3Elem, inputElem);
 
   })
 
@@ -322,6 +348,7 @@ console.info('2');
 // Dropdown list menu
 
 function toggleMenu(menu) {
+  console.info('toggleManu');
   const menuBtnElem = menu.querySelector('button');
   menuBtnElem.addEventListener('click', function () {
     const dropdownMenuElem = menu.querySelector('.dropdown-menu');
@@ -348,6 +375,7 @@ function toggleMenu(menu) {
 
 
 function deleteCardListener(deleteLiElem) {
+  console.info('deleteCardListener');
 
   deleteLiElem.addEventListener('click', function () {
     const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
@@ -362,11 +390,10 @@ function deleteCardListener(deleteLiElem) {
         return list.title === cardToDeleteTitle;
       });
       const indexToDelete = appData.lists.indexOf(appDataElemToDelete);
-      appData.lists.splice(indexToDelete,1);
+      appData.lists.splice(indexToDelete, 1);
     } else {
       ulHoldsDelete.style.display = 'none';
     }
-
 
 
   })
@@ -376,6 +403,7 @@ function deleteCardListener(deleteLiElem) {
 
 
 function DeleteCard() {
+  console.info('deleteCard');
   const deleteCardLiElems = document.querySelectorAll('.delete-card');
   for (const deleteLiElem of deleteCardLiElems) {
     deleteCardListener(deleteLiElem);
@@ -388,6 +416,7 @@ DeleteCard()
 
 // edit note behavior
 function editNoteListener(noteElem) {
+  console.info('editNoteListener');
   const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
   // console.info(editBtnElem);
@@ -420,6 +449,7 @@ const addMemberTamplet = `<span class="member-name"></span>
     <button type="button" class="btn btn-success edit-btns save-btn pull-right">Save</button>`;
 
 function createNewMember(name) {
+  console.info('createMember');
   const membersListElem = document.querySelector('.members-list');
   const addMemberLiElem = document.querySelector('.add-member-li');
   const newMemberToAdd = document.createElement('li')
@@ -439,6 +469,17 @@ function createNewMember(name) {
 
     // in appDate
     // ****************************************
+    // console.info(appData.members);
+    const memberNameToDelete = (liMemberElem.querySelector('.member-name').innerHTML);
+
+    function memberToDelete(member) {
+      return member.name === memberNameToDelete;
+    }
+
+    const memberElemToRemove = appData.members.find(memberToDelete);
+    const indexOfToRemove = appData.members.indexOf(memberElemToRemove);
+    appData.members.splice(indexOfToRemove, 1);
+    // console.info(appData.members);
 
   })
   // edit member
@@ -466,22 +507,34 @@ function createNewMember(name) {
     editMemberInputElem.focus();
     memberNameSpan.style.display = 'none';
 
-    // save Changes functionalty
-    saveBtnElem.addEventListener('click', function (e) {
-      if (editMemberInputElem.value === '') {
-        editMemberInputElem.value = memberNameSpan.innerHTML; 
+    // edit save Changes functionalty
+    saveBtnElem.addEventListener('click', function () {
+      const memberName = memberNameSpan.innerHTML;
+
+      function memberToEdit(member) {
+        return member.name === memberName;
       }
 
-      console.info(editMemberInputElem.value, memberNameSpan);
+      const memberElemToEdit = appData.members.find(memberToEdit);
+      memberElemToEdit['name'] = editMemberInputElem.value;
+      console.info(appData.members);
+
+      if (editMemberInputElem.value === '') {
+        editMemberInputElem.value = memberNameSpan.innerHTML;
+
+      }
+
+      // console.info(editMemberInputElem.value, memberNameSpan);
       memberNameSpan.innerHTML = editMemberInputElem.value
       memberNameSpan.style.display = 'inline-block';
       editMemberInputElem.style.display = 'none';
+
+
     })
 
 
-
     // cancel button functionality
-    cancelBtnElem.addEventListener('click' , function () {
+    cancelBtnElem.addEventListener('click', function () {
       for (const btn of btnsToHide) {
         btn.style.display = 'inline-block';
       }
@@ -495,7 +548,6 @@ function createNewMember(name) {
     });
 
 
-
   })
 
 
@@ -506,6 +558,7 @@ function createNewMember(name) {
 
 // console.info(addMemberBtn);
 function addMemberEventListener() {
+  console.info('editmemberListener');
   const addMemberBtn = document.querySelector('.add-member-btn');
 
   addMemberBtn.addEventListener('click', function (e) {
@@ -515,7 +568,7 @@ function addMemberEventListener() {
     if (newMemberName !== '') {
       createNewMember(newMemberName);
       inputElem.value = '';
-      appData.members.push({name : newMemberName});
+      appData.members.push({name: newMemberName});
     }
 
 
