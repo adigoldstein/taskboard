@@ -159,9 +159,9 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     const noteElem = e.target.closest('.note');
     // console.info(modalElem);
     console.info(noteElem);
-    const modalCardText = modalElem.querySelector('.card-text');
-    // console.info(modalCardText);
-    console.info(noteElem.closest('.note-text-span'));
+    const modalCardText = modalElem.querySelector('.card-textarea');
+    console.info(modalCardText);
+    modalCardText.innerHTML = noteElem.querySelector('.note-text-span').innerHTML;
   })
   editNoteListener(liNoteElem)
   notesUlElem.appendChild(liNoteElem);
