@@ -2,8 +2,12 @@ const appData = {
   lists: [],
   members: []
 };
-getBoardJSON();
-getMembersJSON();
+// uuid random id example:
+console.info(uuid());
+
+
+
+
 
 // Create HTML skeleton dynamic
 
@@ -29,7 +33,7 @@ function createBoard() {
   console.info('CreateCardboard');
   const boardTamplet = `<section id="board>
     "<ul class="card-list">
-      <li class="cards-li add-list-li">
+      <li class="cards-li list-li  add-list-li">
         <div class="card">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -79,15 +83,18 @@ function createMembers() {
   addMemberEventListener();
 
   for (const member of appData.members) {
-    createNewMember(member.name)
+  console.info(member.id);
+    createNewMember(member.name, member.id)
   }
 }
 
 
 function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   console.info('addNoteW....');
+  // console.info(noteInfo.id);
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
+
 
   const editBtnElem = document.createElement('button');
   editBtnElem.setAttribute('type', 'button');
@@ -99,9 +106,12 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   let noteText = '';
   if (!noteInfo) {
     noteTextSpan.textContent = 'New note created...'
+    liNoteElem.setAttribute('data-id', uuid());
+
 
   } else {
     noteTextSpan.textContent = noteInfo.text
+    liNoteElem.setAttribute('data-id', noteInfo.id);
   }
 
   liNoteElem.innerHTML = noteText;
@@ -113,10 +123,23 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   liNoteElem.appendChild(labelDivElem);
 
   if (noteInfo) {
-    for (const member of noteInfo.members) {
+    let memberName = '';
+    for (let member of noteInfo.members) {
+      console.info(member);
+      console.info(appData.members);
+      // ************turning member id to member name
+      for (const membersData of  appData.members) {
+        console.info(membersData.id);
+        if (membersData.id === member) {
+          memberName = membersData.name;
+        }
+      }
+console.info(memberName);
+
+
       const labelElem = document.createElement('span');
       // get The first letter of each word
-      let abbrev = member.split(' ');
+      let abbrev = memberName.split(' ');
       let nameholder = '';
       for (const part of abbrev) {
         let nameIn = [];
@@ -127,7 +150,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
       labelElem.textContent = nameholder;
       labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label pull-right');
-      labelElem.setAttribute('title', member);
+      labelElem.setAttribute('title', memberName);
 
       labelDivElem.appendChild(labelElem);
     }
@@ -141,8 +164,10 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     for (const obj of appData.lists) {
       if (obj.title === listTitleText) {
         console.info(obj.tasks);
-        obj.tasks.push({members : [],
-        text: 'New note created...'})
+        obj.tasks.push({
+          members: [],
+          text: 'New note created...'
+        })
         console.info(obj.tasks);
 
       }
@@ -189,7 +214,6 @@ function addCardBtnListener(btnToListen) {
 //   }
 // }
 const tampletLi = `
-    <li class="cards-li">
       <div class="card content-card">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -212,27 +236,31 @@ const tampletLi = `
           </div>
         </div>
       </div>
-    </li>
   `;
 
 function addList(listData) {
   console.info('addList');
   // console.info(listData);
+
   const mainUlList = document.querySelector('.card-list');
   const addListLI = document.querySelector('.add-list-li');
-
   const liListElem = document.createElement('li');
 
+  liListElem.className = 'cards-li';
   liListElem.className = 'list-li';
   liListElem.innerHTML = tampletLi;
+
+
 // console.info(listData);
   if (listData.type !== 'click') {
 // ******************When inserting JSON data**********************
 //     console.info(listData)
+    liListElem.setAttribute('data-id', listData.id);
     const cardTitle = liListElem.querySelector('.panel-title');
     const noteUl = liListElem.querySelector('.notes-ul');
     // console.info(noteUl);
     cardTitle.innerHTML = listData.title;
+
 
     for (const task of listData.tasks) {
       // console.info(task);
@@ -240,11 +268,17 @@ function addList(listData) {
     }
 
   } else {
+    const id = uuid();
+    console.info(id);
+    liListElem.setAttribute('data-id', id);
+
     // add to appData
     // console.info(appData.lists);
     const listToAddToAppData = {
       title: 'New list inserted',
-      tasks: []
+      tasks: [],
+      id: id
+
     }
     // console.info(listToAddToAppData);
     appData.lists.push(listToAddToAppData);
@@ -385,11 +419,11 @@ function deleteCardListener(deleteLiElem) {
   console.info('deleteCardListener');
 
   deleteLiElem.addEventListener('click', function () {
-    const cardToDeleteLiElem = deleteLiElem.closest('.cards-li');
+    const cardToDeleteLiElem = deleteLiElem.closest('.list-li');
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
     const deleteAnswer = confirm('Deleting ' + cardToDeleteTitle + ' list. are you sure?');
     const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
-
+    console.info(cardToDeleteLiElem);
     if (deleteAnswer) {
       cardToDeleteLiElem.remove()
       // Remove from appData
@@ -455,15 +489,22 @@ const addMemberTamplet = `<span class="member-name"></span>
     <button type="button" class="btn btn-default edit-btns cancel-btn pull-right">Cancel</button>
     <button type="button" class="btn btn-success edit-btns save-btn pull-right">Save</button>`;
 
-function createNewMember(name) {
+function createNewMember(member, id) {
   console.info('createMember');
+
   const membersListElem = document.querySelector('.members-list');
   const addMemberLiElem = document.querySelector('.add-member-li');
-  const newMemberToAdd = document.createElement('li')
+  const newMemberToAdd = document.createElement('li');
 
   newMemberToAdd.setAttribute('class', 'list-group-item member-li');
+  newMemberToAdd.setAttribute('data-id', id);
+
+
+
+
   newMemberToAdd.innerHTML = addMemberTamplet;
-  newMemberToAdd.querySelector('span').textContent = name;
+  newMemberToAdd.querySelector('span').textContent = member;
+
 
   // Delete member
   const deleteMemberBtn = newMemberToAdd.querySelector('.delete-member-btn');
@@ -573,9 +614,12 @@ function addMemberEventListener() {
     const newMemberName = inputElem.value;
 
     if (newMemberName !== '') {
-      createNewMember(newMemberName);
+      const id =uuid();
+      createNewMember(newMemberName,id );
       inputElem.value = '';
-      appData.members.push({name: newMemberName});
+
+      // in appData
+      appData.members.push({name: newMemberName, id: id});
     }
 
 
@@ -643,7 +687,7 @@ function getBoardJSON() {
 
   const data = new XMLHttpRequest();
   data.addEventListener("load", reqListener);
-  data.open("GET", "assets/board.json");
+  data.open("GET", "assets/board-advanced.json");
   data.send();
 }
 
@@ -673,3 +717,6 @@ function getMembersJSON() {
   membersData.send();
 
 }
+
+getBoardJSON();
+getMembersJSON();
