@@ -3,10 +3,7 @@ const appData = {
   members: []
 };
 // uuid random id example:
-console.info(uuid());
-
-
-
+// console.info(uuid());
 
 
 // Create HTML skeleton dynamic
@@ -83,7 +80,7 @@ function createMembers() {
   addMemberEventListener();
 
   for (const member of appData.members) {
-  console.info(member.id);
+    console.info(member.id);
     createNewMember(member.name, member.id)
   }
 }
@@ -125,16 +122,17 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   if (noteInfo) {
     let memberName = '';
     for (let member of noteInfo.members) {
-      console.info(member);
-      console.info(appData.members);
+      // console.info(member);
+      // console.info(appData.members);
+
       // ************turning member id to member name
       for (const membersData of  appData.members) {
-        console.info(membersData.id);
+        // console.info(membersData.id);
         if (membersData.id === member) {
           memberName = membersData.name;
         }
       }
-console.info(memberName);
+// console.info(memberName);
 
 
       const labelElem = document.createElement('span');
@@ -178,15 +176,40 @@ console.info(memberName);
   editBtnElem.addEventListener('click', function (e) {
 
     const modalElem = document.querySelector('.modal ');
+    console.info(modalElem);
+    const modalCardText = modalElem.querySelector('.card-textarea')
+    console.info(modalCardText);
     modalElem.style.display = 'block';
 
     // fill modal with relevant content*********
     const noteElem = e.target.closest('.note');
-    // console.info(modalElem);
     console.info(noteElem);
-    const modalCardText = modalElem.querySelector('.card-textarea');
-    console.info(modalCardText);
-    modalCardText.innerHTML = noteElem.querySelector('.note-text-span').innerHTML;
+    const noteToEditId = noteElem.getAttribute('data-id');
+    console.info('note id' ,noteToEditId);
+    const listsappData = appData.lists;
+    console.info(listsappData);
+    const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
+    console.info('list id',mainListId);
+
+    for (const obj of listsappData) {
+      // console.info(obj);
+
+    }
+    const listElemToEditInappData = listsappData.find((each) => {
+      // console.info(each);
+      // console.info(noteToEditId,'******');
+      return each.id === mainListId;
+    })
+    console.info(listElemToEditInappData.tasks);
+    const noteElemToEditinappData = listElemToEditInappData.tasks.find((each) => {
+      // console.info(each);
+
+      return each.id === noteToEditId;
+    })
+    console.info(noteElemToEditinappData);
+
+    // put note text here
+    modalCardText.innerHTML =noteElemToEditinappData.text;
   })
   editNoteListener(liNoteElem)
   notesUlElem.appendChild(liNoteElem);
@@ -305,8 +328,6 @@ function addList(listData) {
   deleteCardListener(deleteCardLiElem);
 
 
-  // Edit note listener
-
   // insert created new list before the last list
   mainUlList.insertBefore(liListElem, addListLI);
 
@@ -338,16 +359,20 @@ function titleListenerToRename(item) {
 
 }
 function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
+  console.info(h3Elem);
   console.info('editListTitleAndUpdateData');
+  const listLiId = h3Elem.closest('.list-li').getAttribute('data-id')
+  console.info(listLiId);
   const oldTitle = h3Elem.textContent;
   console.info(oldTitle);
+  console.info();
   h3Elem.textContent = inputElem.value;
   h3Elem.style.display = 'block';
   inputElem.style.display = 'none'
   console.info(h3Elem);
   console.info(appData.lists);
   const listToEdit = appData.lists.find((each) => {
-    return each.title === oldTitle;
+    return each.id === listLiId;
   })
   listToEdit.title = h3Elem.innerHTML;
   console.info(appData.lists);
@@ -423,13 +448,16 @@ function deleteCardListener(deleteLiElem) {
     const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
     const deleteAnswer = confirm('Deleting ' + cardToDeleteTitle + ' list. are you sure?');
     const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
-    console.info(cardToDeleteLiElem);
+    const idToDel = cardToDeleteLiElem.getAttribute('data-id');
     if (deleteAnswer) {
-      cardToDeleteLiElem.remove()
+      cardToDeleteLiElem.remove();
       // Remove from appData
+
       const appDataElemToDelete = appData.lists.find((list) => {
-        return list.title === cardToDeleteTitle;
+        console.info(list);
+        return list.id === idToDel;
       });
+      console.info(appDataElemToDelete);
       const indexToDelete = appData.lists.indexOf(appDataElemToDelete);
       appData.lists.splice(indexToDelete, 1);
     } else {
@@ -498,8 +526,6 @@ function createNewMember(member, id) {
 
   newMemberToAdd.setAttribute('class', 'list-group-item member-li');
   newMemberToAdd.setAttribute('data-id', id);
-
-
 
 
   newMemberToAdd.innerHTML = addMemberTamplet;
@@ -614,8 +640,8 @@ function addMemberEventListener() {
     const newMemberName = inputElem.value;
 
     if (newMemberName !== '') {
-      const id =uuid();
-      createNewMember(newMemberName,id );
+      const id = uuid();
+      createNewMember(newMemberName, id);
       inputElem.value = '';
 
       // in appData
