@@ -254,7 +254,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     modalElem.style.display = 'block';
 
     // fill modal with relevant content*********
-    const noteElem = e.target.closest('.note');
+    let noteElem = e.target.closest('.note');
     console.info(noteElem);
 
     const noteToEditId = noteElem.getAttribute('data-id');
