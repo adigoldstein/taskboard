@@ -3,7 +3,7 @@ const appData = {
   members: []
 };
 // uuid random id example:
-// console.info(uuid());
+console.info(uuid());
 
 
 // Create HTML skeleton dynamic
@@ -83,6 +83,46 @@ function createMembers() {
     console.info(member.id);
     createNewMember(member.name, member.id)
   }
+}
+
+// save changes on notes edit**
+function saveChangesEditNote(e) {
+  console.info('yooooo');
+// console.info(e.target);
+  const modalElem = e.target.closest('.modal');
+  // console.info(modalElem);
+  modalElem.style.display = 'none'
+  const cardTextarea = modalElem.querySelector('.card-textarea');
+  const cardUIElem = e.target.querySelector('.note-text-span');
+  console.info(cardUIElem);
+  console.info(cardTextarea.value);
+  const noteId = modalElem.getAttribute('note-id');
+  const listId = modalElem.getAttribute('list-id');
+  console.info(noteId, ' noteid');
+  const listsappData = appData.lists;
+  const listElemToEdit = listsappData.find((each) => {
+    // console.info(each);
+    return each.id === listId;
+  })
+  console.info(listElemToEdit, 'list element');
+  const noteElemToEdit = listElemToEdit.tasks.find((each) => {
+    // console.info(each);
+    return each.id === noteId;
+  })
+
+  const allNotesElems = document.querySelectorAll('.note');
+  console.info(allNotesElems);
+  allNotesElems.forEach(  function (note) {
+    console.info(note);
+    const checkedNoteId = note.getAttribute('data-id');
+    console.info(checkedNoteId);
+    if (checkedNoteId === noteId) {
+     note.querySelector('.note-text-span').innerHTML = cardTextarea.value;
+    }
+  })
+  console.info(noteElemToEdit);
+  noteElemToEdit.text = cardTextarea.value
+  console.info(noteElemToEdit);
 }
 
 
@@ -172,7 +212,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     }
 
   }
-
+// Edit Modal***********************************
   editBtnElem.addEventListener('click', function (e) {
 
     const modalElem = document.querySelector('.modal ');
@@ -184,37 +224,44 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     // fill modal with relevant content*********
     const noteElem = e.target.closest('.note');
     console.info(noteElem);
+
     const noteToEditId = noteElem.getAttribute('data-id');
-    console.info('note id' ,noteToEditId);
-    const listsappData = appData.lists;
-    console.info(listsappData);
+    // console.info('note id' ,noteToEditId);
+    // console.info(listsappData);
     const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
-    console.info('list id',mainListId);
+    console.info('list id', mainListId);
+    modalElem.setAttribute('note-id', noteToEditId);
+    modalElem.setAttribute('list-id', mainListId);
 
-    for (const obj of listsappData) {
-      // console.info(obj);
-
-    }
+    const listsappData = appData.lists;
     const listElemToEditInappData = listsappData.find((each) => {
       // console.info(each);
-      // console.info(noteToEditId,'******');
       return each.id === mainListId;
     })
-    console.info(listElemToEditInappData.tasks);
+    // console.info(listElemToEditInappData.tasks);
     const noteElemToEditinappData = listElemToEditInappData.tasks.find((each) => {
       // console.info(each);
 
       return each.id === noteToEditId;
     })
-    console.info(noteElemToEditinappData);
+    // console.info(noteElemToEditinappData);
 
-    // put note text here
-    modalCardText.innerHTML =noteElemToEditinappData.text;
-  })
-  editNoteListener(liNoteElem)
+    // Shows Note content from Appdata:
+    modalCardText.innerHTML = noteElemToEditinappData.text;
+
+
+  });
+
+
+
+  editNoteListener(liNoteElem);
   notesUlElem.appendChild(liNoteElem);
+
+
 }
 
+
+// end of modal stuff***************************
 
 function addCardBtnListener(btnToListen) {
   console.info('addCardBtnListener');
@@ -670,22 +717,30 @@ function addMemberEventListener() {
 // init();
 
 
-//***************** modal stuff***********************
-function closeModal() {
+
+function modalInit() {
+  function closeModal() {
+    const modalElem = document.querySelector('.modal');
+    modalElem.style.display = 'none'
+  }
+
   const modalElem = document.querySelector('.modal');
-  modalElem.style.display = 'none'
+  const xModalCloseBtn = modalElem.querySelector('.close');
+  xModalCloseBtn.addEventListener('click', function () {
+    closeModal()
+  })
+  const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
+// console.info(modalCloseBtn);
+  modalCloseBtn.addEventListener('click', function () {
+    closeModal()
+  })
+  const saveBtn = modalElem.querySelector('.modal-save-changed');
+// console.info(saveBtn);
+  saveBtn.addEventListener('click', saveChangesEditNote);
 }
 
-const modalElem = document.querySelector('.modal');
-const xModalCloseBtn = modalElem.querySelector('.close');
-xModalCloseBtn.addEventListener('click', function () {
-  closeModal()
-})
-const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
-// console.info(modalCloseBtn);
-modalCloseBtn.addEventListener('click', function () {
-  closeModal()
-})
+
+
 // ****************Import JSON stuff****************
 function areJSONSHeher() {
 
@@ -746,3 +801,4 @@ function getMembersJSON() {
 
 getBoardJSON();
 getMembersJSON();
+modalInit()
