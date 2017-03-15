@@ -112,19 +112,51 @@ function saveChangesEditNote(e) {
 
   const allNotesElems = document.querySelectorAll('.note');
   console.info(allNotesElems);
-  allNotesElems.forEach(  function (note) {
+  allNotesElems.forEach(function (note) {
     console.info(note);
     const checkedNoteId = note.getAttribute('data-id');
     console.info(checkedNoteId);
     if (checkedNoteId === noteId) {
-     note.querySelector('.note-text-span').innerHTML = cardTextarea.value;
+      note.querySelector('.note-text-span').innerHTML = cardTextarea.value;
     }
   })
-  console.info(noteElemToEdit);
-  noteElemToEdit.text = cardTextarea.value
-  console.info(noteElemToEdit);
+  // console.info(noteElemToEdit);
+  noteElemToEdit.text = cardTextarea.value;
+  // console.info(noteElemToEdit);
 }
+function deleteNoteHandler(e) {
+  const modalElem = e.target.closest('.modal');
+  // console.info(modalElem);
+  modalElem.style.display = 'none';
+  const noteId = modalElem.getAttribute('note-id');
+  // console.info(noteId);
+  const allNotesElems = document.querySelectorAll('.note');
+  console.info(allNotesElems);
+  allNotesElems.forEach(function (note) {
+    // console.info(note);
+    const checkedNoteId = note.getAttribute('data-id');
+    if (checkedNoteId === noteId) {
+      note.remove();
 
+      // in appData
+      const listId = modalElem.getAttribute('list-id');
+      // console.info(listId);
+      console.info(appData.lists);
+
+      const containingList = appData.lists.find((obj) => {
+        return obj.id === listId;
+      })
+      console.info(containingList);
+      const noteToRemove = containingList.tasks.find((note) => {
+        return noteId === note.id;
+      });
+      console.info(noteToRemove);
+      const indexToRemove = containingList.tasks.indexOf(noteToRemove);
+      containingList.tasks.splice(indexToRemove,1);
+
+    }
+  })
+}
 
 function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   console.info('addNoteW....');
@@ -251,7 +283,6 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
 
   });
-
 
 
   editNoteListener(liNoteElem);
@@ -717,7 +748,6 @@ function addMemberEventListener() {
 // init();
 
 
-
 function modalInit() {
   function closeModal() {
     const modalElem = document.querySelector('.modal');
@@ -737,8 +767,11 @@ function modalInit() {
   const saveBtn = modalElem.querySelector('.modal-save-changed');
 // console.info(saveBtn);
   saveBtn.addEventListener('click', saveChangesEditNote);
-}
 
+  const deleteNoteElem = document.querySelector('.del-note-btn');
+  deleteNoteElem.addEventListener('click', deleteNoteHandler)
+
+}
 
 
 // ****************Import JSON stuff****************
