@@ -152,7 +152,7 @@ function deleteNoteHandler(e) {
       });
       console.info(noteToRemove);
       const indexToRemove = containingList.tasks.indexOf(noteToRemove);
-      containingList.tasks.splice(indexToRemove,1);
+      containingList.tasks.splice(indexToRemove, 1);
 
     }
   })
@@ -258,7 +258,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     console.info(noteElem);
 
     const noteToEditId = noteElem.getAttribute('data-id');
-    // console.info('note id' ,noteToEditId);
+    console.info('note id', noteToEditId);
     // console.info(listsappData);
     const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
     console.info('list id', mainListId);
@@ -280,6 +280,51 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
     // Shows Note content from Appdata:
     modalCardText.innerHTML = noteElemToEditinappData.text;
+
+// fill members
+    const memberListHolder = document.querySelector('.members-checkbox');
+    console.info(memberListHolder);
+    memberListHolder.innerHTML = '';
+    console.info(appData.members);
+    appData.members.forEach((member) => {
+      const memberId = member.id;
+      const memberName = member.name;
+      console.info(memberName, memberId);
+      const memElm = document.createElement('label');
+      memElm.innerHTML = `<input type="checkbox" value=""><span class="member-name-span"></span>`;
+      // console.info(memElm);
+      memberListHolder.appendChild(memElm);
+      const nameSpanElem = memElm.querySelector('.member-name-span');
+      nameSpanElem.innerHTML = memberName;
+      const inputElem = memElm.querySelector('input');
+      console.info(inputElem);
+      inputElem.setAttribute('member-id', memberId);
+
+
+
+    })
+    // find which members are in note
+    // console.info(noteElemToEditinappData.members);
+    const membersInThisNote = noteElemToEditinappData.members;
+    console.info(membersInThisNote);
+
+    membersInThisNote.forEach((item) => {
+
+    })
+
+
+    const membersList = modalElem.querySelectorAll('input');
+    membersInThisNote.forEach((memberInList) => {
+      membersList.forEach((inputOfmembers) => {
+        const inputMemberId = inputOfmembers.getAttribute('member-id');
+        // console.info(inputMemberId);
+        // console.info(memberInList);
+        if (inputMemberId === memberInList) {
+          inputOfmembers.checked = true ;
+        }
+
+      })
+    })
 
 
   });
