@@ -64,6 +64,7 @@ main {
   border-radius: 10px;
   list-style: none;
   padding: 10px;
+  padding-bottom: 30px;
   margin: 10px auto;
   position: relative;
 }
@@ -73,6 +74,12 @@ main {
   position: absolute;
   top: 5px;
   right: 5px;
+}
+
+.lable-div {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
 }
 
 
@@ -134,7 +141,8 @@ main {
 }
 
 .member-name-label {
-  padding: 5px;
+  padding: 5px 10px;
+  margin-left: 6px;
 }
 
 .add-list-li .add-list-btn, .add-list-btn .panel-heading {
@@ -192,9 +200,6 @@ main {
   margin-bottom: 0;
 }
 
-.member-li {
-  /*background-color: green;*/
-}
 
 /********MODAL STUFF********/
 

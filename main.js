@@ -164,7 +164,7 @@ function saveChangesEditNote(e) {
     }
 
     labelElem.textContent = nameholder;
-    labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label pull-right');
+    labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
     labelElem.setAttribute('title', memberName);
 
     labelDivElem.appendChild(labelElem);
@@ -272,7 +272,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       }
 
       labelElem.textContent = nameholder;
-      labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label pull-right');
+      labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
       labelElem.setAttribute('title', memberName);
 
       labelDivElem.appendChild(labelElem);
@@ -767,9 +767,8 @@ function createNewMember(member, id) {
       memberNameSpan.style.display = 'inline-block';
       editMemberInputElem.style.display = 'none';
 
-      for (const btn of btnsToHide) {
-        btn.style.display = 'none';
-      }
+      btnsToHide.style.display = 'none';
+
     })
 
 
