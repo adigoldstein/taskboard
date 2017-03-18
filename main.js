@@ -26,8 +26,8 @@ window.addEventListener('hashchange', (event) => {
 );
 
 function createBoard() {
-  const boardTamplet = `<section id="board>
-    "<ul class="card-list">
+  const boardTamplet = `<section id="board">
+    <ul class="card-list">
       <li class="cards-li list-li  add-list-li">
         <div class="card">
           <div class="panel panel-default">
@@ -366,8 +366,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   if (!noteInfo) {
     console.info(liNoteElem);
     const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
-    console.info(appData.
-      lists);
+    console.info(appData.lists);
     let listElemToAddNote = {};
     for (const obj of appData.lists) {
       // console.info(obj);
@@ -383,7 +382,6 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       }
     }
   }
-
 
 
 }
@@ -426,7 +424,6 @@ const tampletLi = `
               </div>
           </div>
           <ul class="notes-ul">
-             <!-- Note insert should be HERE!!!! -->
           </ul>
           <div class="panel-footer">
             <button class="add-note-btn">Add Note..</button>

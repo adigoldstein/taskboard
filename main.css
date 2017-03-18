@@ -36,12 +36,13 @@ main {
   padding-top: 10px;
   display: flex;
   list-style: none;
-  /*display: none;*/
 }
+
+
 
 .card {
   flex-direction: row;
-  width: 400px;
+  width: 260px;
   /*border-radius: 10px;*/
   margin: 0 15px;
   min-height: 300px;
@@ -65,7 +66,7 @@ main {
   list-style: none;
   padding: 10px;
   padding-bottom: 30px;
-  margin: 10px auto;
+  margin: 15px auto;
   position: relative;
 }
 
