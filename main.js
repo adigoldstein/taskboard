@@ -77,7 +77,7 @@ function createMembers() {
   addMemberEventListener();
 
   for (const member of appData.members) {
-    console.info(member.id);
+    // console.info(member.id);
     createNewMember(member.name, member.id)
   }
 }
@@ -105,7 +105,7 @@ function saveChangesEditNote(e) {
     // console.info(each);
     return each.id === noteId;
   })
-console.info(noteElemToEdit);
+  console.info(noteElemToEdit);
   const allNotesElems = document.querySelectorAll('.note');
   console.info(allNotesElems);
   let noteElem = '';
@@ -133,7 +133,7 @@ console.info(noteElemToEdit);
       newMenbersOfNote.push(newMemberId)
     }
   }
-console.info(newMenbersOfNote);
+  console.info(newMenbersOfNote);
   noteElemToEdit.members = newMenbersOfNote;
 
 // in UI
@@ -174,8 +174,6 @@ console.info(newMenbersOfNote);
   console.info(oldLabelDiv);
   console.info(labelDivElem);
   oldLabelDiv.innerHTML = labelDivElem.innerHTML;
-
-
 
 
 }
@@ -225,11 +223,12 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   editBtnElem.textContent = 'Edit';
 
   const noteTextSpan = document.createElement('span');
+  const noteUuid = uuid();
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
   if (!noteInfo) {
     noteTextSpan.textContent = 'New note created...'
-    liNoteElem.setAttribute('data-id', uuid());
+    liNoteElem.setAttribute('data-id', noteUuid);
 
 
   } else {
@@ -277,24 +276,6 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       labelElem.setAttribute('title', memberName);
 
       labelDivElem.appendChild(labelElem);
-    }
-
-  } else {
-    // add to appData
-    console.info(liNoteElem);
-    const listTitleText = notesUlElem.closest('.panel').querySelector('.panel-title').innerHTML;
-    console.info(appData.lists);
-    let listElemToAddNote = {};
-    for (const obj of appData.lists) {
-      if (obj.title === listTitleText) {
-        console.info(obj.tasks);
-        obj.tasks.push({
-          members: [],
-          text: 'New note created...'
-        })
-        console.info(obj.tasks);
-
-      }
     }
 
   }
@@ -355,7 +336,6 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       inputElem.setAttribute('member-id', memberId);
 
 
-
     })
     // find which members are in note
     const membersInThisNote = noteElemToEditinappData.members;
@@ -368,7 +348,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
         // console.info(inputMemberId);
         // console.info(memberInList);
         if (inputMemberId === memberInList) {
-          inputOfmembers.checked = true ;
+          inputOfmembers.checked = true;
         }
 
       })
@@ -380,6 +360,30 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
   editNoteListener(liNoteElem);
   notesUlElem.appendChild(liNoteElem);
+
+
+  // add to appData
+  if (!noteInfo) {
+    console.info(liNoteElem);
+    const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
+    const listTitleText = notesUlElem.closest('.panel').querySelector('.panel-title').innerHTML;
+    console.info(appData.lists);
+    let listElemToAddNote = {};
+    for (const obj of appData.lists) {
+      // console.info(obj);
+      if (obj.id === listId) {
+        console.info(obj.tasks);
+        obj.tasks.push({
+          members: [],
+          text: 'New note created...',
+          id: noteUuid
+        })
+        console.info(obj.tasks);
+
+      }
+    }
+  }
+
 
 
 }
@@ -465,7 +469,7 @@ function addList(listData) {
     liListElem.setAttribute('data-id', id);
 
     // add to appData
-    // console.info(appData.lists);
+    console.info(appData.lists);
     const listToAddToAppData = {
       title: 'New list inserted',
       tasks: [],
@@ -714,7 +718,6 @@ function createNewMember(member, id) {
     const indexOfToRemove = appData.members.indexOf(memberElemToRemove);
     appData.members.splice(indexOfToRemove, 1);
 
-    
 
   })
   // edit member
