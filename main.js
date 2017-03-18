@@ -3,13 +3,12 @@ const appData = {
   members: []
 };
 // uuid random id example:
-console.info(uuid());
+// console.info(uuid());
 
 
 // Create HTML skeleton dynamic
 
 function createContentByHash() {
-  console.info('createContenctByHash');
   if (window.location.hash === '#members') {
     createMembers();
 
@@ -27,7 +26,6 @@ window.addEventListener('hashchange', (event) => {
 );
 
 function createBoard() {
-  console.info('CreateCardboard');
   const boardTamplet = `<section id="board>
     "<ul class="card-list">
       <li class="cards-li list-li  add-list-li">
@@ -61,7 +59,6 @@ function createBoard() {
 
 
 function createMembers() {
-  console.info('createMember');
   const membersTamplet = `<section id="members">
     <h1>Taskboard Members</h1>
     <ul class="list-group members-list">
@@ -80,22 +77,21 @@ function createMembers() {
   addMemberEventListener();
 
   for (const member of appData.members) {
-    console.info(member.id);
+    // console.info(member.id);
     createNewMember(member.name, member.id)
   }
 }
 
 // save changes on notes edit**
 function saveChangesEditNote(e) {
-  console.info('yooooo');
 // console.info(e.target);
   const modalElem = e.target.closest('.modal');
   // console.info(modalElem);
   modalElem.style.display = 'none'
   const cardTextarea = modalElem.querySelector('.card-textarea');
   const cardUIElem = e.target.querySelector('.note-text-span');
-  console.info(cardUIElem);
-  console.info(cardTextarea.value);
+  // console.info(cardUIElem);
+  // console.info(cardTextarea.value);
   const noteId = modalElem.getAttribute('note-id');
   const listId = modalElem.getAttribute('list-id');
   console.info(noteId, ' noteid');
@@ -109,20 +105,79 @@ function saveChangesEditNote(e) {
     // console.info(each);
     return each.id === noteId;
   })
-
+console.info(noteElemToEdit);
   const allNotesElems = document.querySelectorAll('.note');
   console.info(allNotesElems);
+  let noteElem = '';
   allNotesElems.forEach(function (note) {
     console.info(note);
     const checkedNoteId = note.getAttribute('data-id');
     console.info(checkedNoteId);
     if (checkedNoteId === noteId) {
       note.querySelector('.note-text-span').innerHTML = cardTextarea.value;
+      noteElem = note;
     }
   })
   // console.info(noteElemToEdit);
   noteElemToEdit.text = cardTextarea.value;
   // console.info(noteElemToEdit);
+
+  // members checkbox
+
+  // in appdata
+  const membersInputsElems = modalElem.querySelectorAll('input');
+  const newMenbersOfNote = [];
+  for (const member of membersInputsElems) {
+    if (member.checked) {
+      const newMemberId = member.getAttribute('member-id')
+      newMenbersOfNote.push(newMemberId)
+    }
+  }
+console.info(newMenbersOfNote);
+  noteElemToEdit.members = newMenbersOfNote;
+
+// in UI
+
+  const labelDivElem = document.createElement('div');
+  labelDivElem.setAttribute('class', 'lable-div');
+  let memberName = '';
+  for (let member of newMenbersOfNote) {
+
+    // ************turning member id to member name
+    for (const membersData of  appData.members) {
+      // console.info(membersData.id);
+      if (membersData.id === member) {
+        memberName = membersData.name;
+      }
+    }
+// console.info(memberName);
+
+
+    const labelElem = document.createElement('span');
+    // get The first letter of each word
+    let abbrev = memberName.split(' ');
+    let nameholder = '';
+    for (const part of abbrev) {
+      let nameIn = [];
+      nameIn = part[0];
+      nameholder += nameIn;
+    }
+
+    labelElem.textContent = nameholder;
+    labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label pull-right');
+    labelElem.setAttribute('title', memberName);
+
+    labelDivElem.appendChild(labelElem);
+  }
+  console.info(noteElem);
+  const oldLabelDiv = noteElem.querySelector('.lable-div');
+  console.info(oldLabelDiv);
+  console.info(labelDivElem);
+  oldLabelDiv.innerHTML = labelDivElem.innerHTML;
+
+
+
+
 }
 function deleteNoteHandler(e) {
   const modalElem = e.target.closest('.modal');
@@ -131,7 +186,7 @@ function deleteNoteHandler(e) {
   const noteId = modalElem.getAttribute('note-id');
   // console.info(noteId);
   const allNotesElems = document.querySelectorAll('.note');
-  console.info(allNotesElems);
+  console.info(allNotzesElems);
   allNotesElems.forEach(function (note) {
     // console.info(note);
     const checkedNoteId = note.getAttribute('data-id');
@@ -159,7 +214,6 @@ function deleteNoteHandler(e) {
 }
 
 function addNoteWTextAndLabels(notesUlElem, noteInfo) {
-  console.info('addNoteW....');
   // console.info(noteInfo.id);
   const liNoteElem = document.createElement('li');
   liNoteElem.className = 'note';
@@ -304,14 +358,8 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
     })
     // find which members are in note
-    // console.info(noteElemToEditinappData.members);
     const membersInThisNote = noteElemToEditinappData.members;
     console.info(membersInThisNote);
-
-    membersInThisNote.forEach((item) => {
-
-    })
-
 
     const membersList = modalElem.querySelectorAll('input');
     membersInThisNote.forEach((memberInList) => {
@@ -340,7 +388,6 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 // end of modal stuff***************************
 
 function addCardBtnListener(btnToListen) {
-  console.info('addCardBtnListener');
 
   btnToListen.addEventListener('click', function addCard(e) {
 
@@ -351,14 +398,14 @@ function addCardBtnListener(btnToListen) {
   })
 }
 
-// function addCardExistBtn() {
-//
-//   const addNoteBtns = document.querySelectorAll('.add-note-btn');
-//
-//   for (const button of addNoteBtns) {
-//     addCardBtnListener(button);
-//   }
-// }
+function addCardExistBtn() {
+
+  const addNoteBtns = document.querySelectorAll('.add-note-btn');
+
+  for (const button of addNoteBtns) {
+    addCardBtnListener(button);
+  }
+}
 const tampletLi = `
       <div class="card content-card">
         <div class="panel panel-default">
@@ -385,7 +432,6 @@ const tampletLi = `
   `;
 
 function addList(listData) {
-  console.info('addList');
   // console.info(listData);
 
   const mainUlList = document.querySelector('.card-list');
@@ -459,7 +505,6 @@ function addList(listData) {
 
 // Change list name
 function hideH3FocusInput(e) {
-  console.info('hideNfoucuseInput');
   const evPressed = e.target;
   const item = evPressed.closest('.card');
 
@@ -475,7 +520,6 @@ function hideH3FocusInput(e) {
 }
 
 function titleListenerToRename(item) {
-  console.info('titleListenertoRename');
   const h3Elem = item.querySelector('h3');
 
   h3Elem.addEventListener('click', hideH3FocusInput);
@@ -483,7 +527,6 @@ function titleListenerToRename(item) {
 }
 function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
   console.info(h3Elem);
-  console.info('editListTitleAndUpdateData');
   const listLiId = h3Elem.closest('.list-li').getAttribute('data-id')
   console.info(listLiId);
   const oldTitle = h3Elem.textContent;
@@ -502,7 +545,6 @@ function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
 }
 
 function inputListener(item) {
-  console.info('inputListener');
   const inputElem = item.querySelector('input');
   const h3Elem = item.querySelector('h3');
 
@@ -537,7 +579,6 @@ function inputListener(item) {
 // Dropdown list menu
 
 function toggleMenu(menu) {
-  console.info('toggleManu');
   const menuBtnElem = menu.querySelector('button');
   menuBtnElem.addEventListener('click', function () {
     const dropdownMenuElem = menu.querySelector('.dropdown-menu');
@@ -564,7 +605,6 @@ function toggleMenu(menu) {
 
 
 function deleteCardListener(deleteLiElem) {
-  console.info('deleteCardListener');
 
   deleteLiElem.addEventListener('click', function () {
     const cardToDeleteLiElem = deleteLiElem.closest('.list-li');
@@ -595,7 +635,6 @@ function deleteCardListener(deleteLiElem) {
 
 
 function DeleteCard() {
-  console.info('deleteCard');
   const deleteCardLiElems = document.querySelectorAll('.delete-card');
   for (const deleteLiElem of deleteCardLiElems) {
     deleteCardListener(deleteLiElem);
@@ -608,7 +647,6 @@ DeleteCard()
 
 // edit note behavior
 function editNoteListener(noteElem) {
-  console.info('editNoteListener');
   const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
   // console.info(editBtnElem);
@@ -641,7 +679,6 @@ const addMemberTamplet = `<span class="member-name"></span>
     <button type="button" class="btn btn-success edit-btns save-btn pull-right">Save</button>`;
 
 function createNewMember(member, id) {
-  console.info('createMember');
 
   const membersListElem = document.querySelector('.members-list');
   const addMemberLiElem = document.querySelector('.add-member-li');
@@ -662,7 +699,8 @@ function createNewMember(member, id) {
 
     const ulMembersElem = e.target.closest('.members-list');
     const liMemberElem = e.target.closest('.member-li');
-    ulMembersElem.removeChild(liMemberElem)
+    // console.info(liMemberElem);
+    // ulMembersElem.removeChild(liMemberElem)
 
     // in appDate
     // ****************************************
@@ -677,6 +715,8 @@ function createNewMember(member, id) {
     const indexOfToRemove = appData.members.indexOf(memberElemToRemove);
     appData.members.splice(indexOfToRemove, 1);
     // console.info(appData.members);
+
+    // Remove member from notes
 
   })
   // edit member
@@ -755,7 +795,6 @@ function createNewMember(member, id) {
 
 // console.info(addMemberBtn);
 function addMemberEventListener() {
-  console.info('editmemberListener');
   const addMemberBtn = document.querySelector('.add-member-btn');
 
   addMemberBtn.addEventListener('click', function (e) {

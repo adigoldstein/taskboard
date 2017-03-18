@@ -31,8 +31,9 @@ main {
   padding-top: 60px;
 }
 
+
 .card-list {
-  padding-top: 10Px;
+  padding-top: 10px;
   display: flex;
   list-style: none;
   /*display: none;*/
@@ -57,7 +58,7 @@ main {
 }
 
 .note {
-  width: 350px;
+  width: 220px;
   min-height: 150px;
   border: 2px solid lightblue;
   border-radius: 10px;
@@ -74,10 +75,7 @@ main {
   right: 5px;
 }
 
-.note-text-span {
-  margin: 30px;
 
-}
 
 .panel-heading input {
   width: 60%;
