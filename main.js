@@ -77,7 +77,7 @@ function createMembers() {
   addMemberEventListener();
 
   for (const member of appData.members) {
-    // console.info(member.id);
+    console.info(member.id);
     createNewMember(member.name, member.id)
   }
 }
@@ -90,8 +90,8 @@ function saveChangesEditNote(e) {
   modalElem.style.display = 'none'
   const cardTextarea = modalElem.querySelector('.card-textarea');
   const cardUIElem = e.target.querySelector('.note-text-span');
-  // console.info(cardUIElem);
-  // console.info(cardTextarea.value);
+  console.info(cardUIElem);
+  console.info(cardTextarea.value);
   const noteId = modalElem.getAttribute('note-id');
   const listId = modalElem.getAttribute('list-id');
   console.info(noteId, ' noteid');
@@ -699,8 +699,7 @@ function createNewMember(member, id) {
 
     const ulMembersElem = e.target.closest('.members-list');
     const liMemberElem = e.target.closest('.member-li');
-    // console.info(liMemberElem);
-    // ulMembersElem.removeChild(liMemberElem)
+    ulMembersElem.removeChild(liMemberElem)
 
     // in appDate
     // ****************************************
@@ -714,9 +713,8 @@ function createNewMember(member, id) {
     const memberElemToRemove = appData.members.find(memberToDelete);
     const indexOfToRemove = appData.members.indexOf(memberElemToRemove);
     appData.members.splice(indexOfToRemove, 1);
-    // console.info(appData.members);
 
-    // Remove member from notes
+    
 
   })
   // edit member
