@@ -366,8 +366,8 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   if (!noteInfo) {
     console.info(liNoteElem);
     const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
-    const listTitleText = notesUlElem.closest('.panel').querySelector('.panel-title').innerHTML;
-    console.info(appData.lists);
+    console.info(appData.
+      lists);
     let listElemToAddNote = {};
     for (const obj of appData.lists) {
       // console.info(obj);
@@ -763,11 +763,13 @@ function createNewMember(member, id) {
       }
 
       // console.info(editMemberInputElem.value, memberNameSpan);
-      memberNameSpan.innerHTML = editMemberInputElem.value
+      memberNameSpan.innerHTML = editMemberInputElem.value;
       memberNameSpan.style.display = 'inline-block';
       editMemberInputElem.style.display = 'none';
 
-
+      for (const btn of btnsToHide) {
+        btn.style.display = 'none';
+      }
     })
 
 
@@ -781,8 +783,6 @@ function createNewMember(member, id) {
       }
       editMemberInputElem.style.display = 'none';
       memberNameSpan.style.display = 'inline-block';
-
-
     });
 
 
