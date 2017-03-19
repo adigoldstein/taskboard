@@ -85,7 +85,7 @@ function createMembers() {
 // save changes on notes edit**
 function saveChangesEditNote(e) {
 // console.info(e.target);
-  const modalElem = e.target.closest('.modal');
+  let modalElem = e.target.closest('.modal');
   // console.info(modalElem);
   modalElem.style.display = 'none'
   const cardTextarea = modalElem.querySelector('.card-textarea');
@@ -293,10 +293,8 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     console.info(noteElem);
 
     const noteToEditId = noteElem.getAttribute('data-id');
-    console.info('note id', noteToEditId);
     // console.info(listsappData);
     const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
-    console.info('list id', mainListId);
     modalElem.setAttribute('note-id', noteToEditId);
     modalElem.setAttribute('list-id', mainListId);
 
@@ -314,7 +312,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     // console.info(noteElemToEditinappData);
 
     // Shows Note content from Appdata:
-    modalCardText.innerHTML = noteElemToEditinappData.text;
+    modalCardText.value = noteElemToEditinappData.text;
 
 // fill members
     const memberListHolder = document.querySelector('.members-checkbox');
@@ -704,17 +702,29 @@ function createNewMember(member, id) {
 
     // in appDate
     // ****************************************
-    // console.info(appData.members);
     const memberNameToDelete = (liMemberElem.querySelector('.member-name').innerHTML);
 
     function memberToDelete(member) {
       return member.name === memberNameToDelete;
+
+
     }
 
     const memberElemToRemove = appData.members.find(memberToDelete);
     const indexOfToRemove = appData.members.indexOf(memberElemToRemove);
     appData.members.splice(indexOfToRemove, 1);
 
+    appData.lists.forEach((list) => {
+      list.tasks.forEach((task) => {
+        task.members.forEach((memberIdInTasks) => {
+          if (memberIdInTasks === id) {
+            const indexToRemove = task.members.indexOf(memberIdInTasks);
+            task.members.splice(indexToRemove,1);
+
+          }
+        })
+      })
+    })
 
   })
   // edit member
@@ -806,28 +816,8 @@ function addMemberEventListener() {
       // in appData
       appData.members.push({name: newMemberName, id: id});
     }
-
-
   })
 }
-
-
-// Init the app - not running!
-// function init() {
-//   addCardExistBtn();
-//
-//   let panelHeadingElem = document.querySelectorAll('.content-card .panel-heading');
-//
-//   for (const item of panelHeadingElem) {
-//     titleListenerToRename(item);
-//     inputListener(item)
-//
-//
-//   }
-// }
-
-// init();
-
 
 function modalInit() {
   function closeModal() {
@@ -841,7 +831,6 @@ function modalInit() {
     closeModal()
   })
   const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
-// console.info(modalCloseBtn);
   modalCloseBtn.addEventListener('click', function () {
     closeModal()
   })
