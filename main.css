@@ -171,10 +171,7 @@ main {
   width: 600px;
 }
 
-.member-li:hover .btn-to-show-on-hover {
-  display: inline-block;
 
-}
 
 .member-name {
   font-size: 18px;
@@ -196,6 +193,18 @@ main {
   margin-left: 5px;
   display: none;
 }
+.member-li:hover .btn-to-show-on-hover {
+  display: inline-block;
+}
+.member-li button.edit-mode-edit-delete{
+  display: none;
+}
+
+button.edit-mode   {
+  display: inline-block;
+}
+
+
 
 .form-group {
   margin-bottom: 0;
