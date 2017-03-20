@@ -1,8 +1,8 @@
-const appData = {
+let appData = {
   lists: [],
   members: []
 };
-const appDataLists = appData.lists;
+
 // uuid random id example:
 // console.info(uuid());
 
@@ -20,7 +20,7 @@ function createContentByHash() {
     createBoard();
   }
 }
-window.addEventListener('hashchange', (event) => {
+window.addEventListener('hashchange', () => {
     createContentByHash()
 
   }
@@ -47,7 +47,7 @@ function createBoard() {
 
   const addListBtn = document.querySelector('.add-list-btn');
   addListBtn.addEventListener('click', addList);
-  for (const list of appData.lists) {
+  for (const list of getLists()) {
     addList(list);
   }
 }
@@ -94,16 +94,12 @@ function saveChangesEditNote(e) {
       noteElem = note;
     }
   });
-  // update modal text to appData*********************************************************************************
-  const listInAppData = getLists().find((list) => {
-    return list.id === listId;
-  });
+  // update modal text to appData**
+  const listInAppData = findListInAppDataById(listId);
 
-  const noteInAppData = getTasksInList(listInAppData).find((task) => {
-    return task.id === noteId;
-  });
+  const noteInAppData = findNoteInListById(listInAppData, noteId);
 
-  noteInAppData.text = cardTextarea.value;
+  updateNoteInAppdata(noteInAppData, cardTextarea.value)
 // ***************
   // members checkbox
 
@@ -115,8 +111,8 @@ function saveChangesEditNote(e) {
       newMenbersOfNote.push(newMemberId)
     }
   }
-  // update members on appData**************************************************************************************
-  noteInAppData.members = newMenbersOfNote;
+  // update members on appData****
+  updateMembersOfNote(noteInAppData, newMenbersOfNote);
 // *********************
 // in UI
 
@@ -126,11 +122,7 @@ function saveChangesEditNote(e) {
   for (let member of newMenbersOfNote) {
 
     // ************turning member id to member name
-    for (const membersData of  getMembers()) {
-      if (membersData.id === member) {
-        memberName = membersData.name;
-      }
-    }
+    memberName = getMemberNameById(member);
 
 
     const labelElem = document.createElement('span');
@@ -166,15 +158,10 @@ function deleteNoteHandler(e) {
     if (checkedNoteId === noteId) {
       note.remove();
       const listId = modalElem.getAttribute('list-id');
-      // delete Note in appData*************************************************************************************
-      const containingList = getLists().find((list) => {
-        return list.id === listId;
-      })
-      const noteToRemove = getTasksInList(containingList).find((note) => {
-        return noteId === note.id;
-      });
-      const indexToRemove = containingList.tasks.indexOf(noteToRemove);
-      containingList.tasks.splice(indexToRemove, 1);
+      // delete Note in appData******
+      const containingList = findListInAppDataById(listId);
+      const noteToRemove = findNoteInListById(containingList, checkedNoteId);
+      removeTaskFromAppData(containingList, noteToRemove);
 // ***********************
     }
   })
@@ -195,12 +182,12 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
   if (!noteInfo) {
-    noteTextSpan.textContent = 'New note created...'
+    noteTextSpan.textContent = 'New note created...';
     liNoteElem.setAttribute('data-id', noteUuid);
 
 
   } else {
-    noteTextSpan.textContent = noteInfo.text
+    noteTextSpan.textContent = noteInfo.text;
     liNoteElem.setAttribute('data-id', noteInfo.id);
   }
 
@@ -214,13 +201,9 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
   if (noteInfo) {
     let memberName = '';
-    for (let member of noteInfo.members) {
+    for (let member of getNoteInfoMembers(noteInfo)) {
       // ************turning member id to member name
-      for (const membersData of getMembers()) {
-        if (membersData.id === member) {
-          memberName = membersData.name;
-        }
-      }
+      memberName = getMemberNameById(member);
 
       const labelElem = document.createElement('span');
       // get The first letter of each word
@@ -256,15 +239,11 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     modalElem.setAttribute('list-id', mainListId);
 
 
-    const listElemToEditInappData = getLists().find((list) => {
-      return list.id === mainListId;
-    })
-    const noteElemToEditinappData = getTasksInList(listElemToEditInappData).find((each) => {
-      return each.id === noteToEditId;
-    })
+    const listToEditInappData = findListInAppDataById(mainListId);
+    const noteToEditinappData = findNoteInListById(listToEditInappData, noteToEditId);
 
     // Shows Note content from Appdata:
-    modalCardText.value = noteElemToEditinappData.text;
+    modalCardText.value = getNoteText(noteToEditinappData);
 
 // fill members
     const memberListHolder = document.querySelector('.members-checkbox');
@@ -282,7 +261,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     })
 
     // find which members are in note
-    const membersInThisNote = noteElemToEditinappData.members;
+    const membersInThisNote = getNoteMembers(noteToEditinappData);
 
     const membersList = modalElem.querySelectorAll('input');
     membersInThisNote.forEach((memberInList) => {
@@ -303,16 +282,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   // add to appData************************************************************************************
   if (!noteInfo) {
     const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
-    let listElemToAddNote = {};
-    for (const list of getLists()) {
-      if (list.id === listId) {
-        list.tasks.push({
-          members: [],
-          text: 'New note created...',
-          id: noteUuid
-        })
-      }
-    }
+    addNewNoteToAppData(listId, noteUuid)
   }
 // ***********************************************************
 
@@ -370,6 +340,7 @@ function addList(listData) {
     liListElem.setAttribute('data-id', listData.id);
     const cardTitle = liListElem.querySelector('.panel-title');
     const noteUl = liListElem.querySelector('.notes-ul');
+
     cardTitle.innerHTML = listData.title;
 
 
@@ -386,9 +357,8 @@ function addList(listData) {
       title: 'New list inserted',
       tasks: [],
       id: id
-    }
-    getLists().push(listToAddToAppData);
-
+    };
+    addNewListToAppData(listToAddToAppData);
   }
 
   // add card button listener
@@ -430,7 +400,6 @@ function hideH3FocusInput(e) {
   inputElem.focus();
   inputElem.value = e.target.textContent;
 
-
 }
 
 function titleListenerToRename(item) {
@@ -446,10 +415,8 @@ function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
   inputElem.style.display = 'none'
 
   // in appData********************************************************************
-  const listToEdit = getLists().find((each) => {
-    return each.id === listLiId;
-  })
-  listToEdit.title = h3Elem.innerHTML;
+  const listToEdit = findListInAppDataById(listLiId);
+  editListTitleInAppData(listToEdit, h3Elem);
 }
 // ************************************************
 function inputListener(item) {
@@ -509,18 +476,13 @@ function deleteCardListener(deleteLiElem) {
       cardToDeleteLiElem.remove();
       // Remove from appData**********************************************************************
 
-      const appDataElemToDelete = getLists().find((list) => {
-        return list.id === idToDel;
-      });
+      const appDataElemToDelete = findListInAppDataById(idToDel);
 
-      const indexToDelete = appData.lists.indexOf(appDataElemToDelete);
-      appData.lists.splice(indexToDelete, 1);
+      removeListFromAppData(appDataElemToDelete)
     } else {
       ulHoldsDelete.style.display = 'none';
     }
-
   })
-
 }
 
 
@@ -546,10 +508,9 @@ function editNoteListener(noteElem) {
   noteElem.addEventListener('mouseout', function () {
     editBtnElem.style.display = 'none'
   })
-
 }
 
-const noteElems = document.querySelectorAll('.note')
+const noteElems = document.querySelectorAll('.note');
 for (const noteElem of noteElems) {
   editNoteListener(noteElem)
 }
@@ -597,19 +558,9 @@ function createNewMember(member, id) {
     // ******************************************************************************************??????????????????
     const memberElemToRemove = getMembers().find(memberToDelete);
     const indexOfToRemove = getMembers().indexOf(memberElemToRemove);
-    getMembers().splice(indexOfToRemove, 1);
+    deleteMemberFromAppData(indexOfToRemove);
 
-    getLists().forEach((list) => {
-      getTasksInList(list).forEach((task) => {
-        task.members.forEach((memberIdInTasks) => {
-          if (memberIdInTasks === id) {
-            const indexToRemove = task.members.indexOf(memberIdInTasks);
-            task.members.splice(indexToRemove, 1);
-
-          }
-        })
-      })
-    })
+    removeMemberDeletedFromTasks(id);
 
   })
   // edit member
@@ -624,22 +575,23 @@ function createNewMember(member, id) {
     const editBtns = liMemberElem.querySelectorAll('.edit-btns');
     const cancelBtnElem = liMemberElem.querySelector('.cancel-btn');
     const saveBtnElem = liMemberElem.querySelector('.save-btn');
-    btnsToHide.forEach((btn) => {
-      btn.classList.add('edit-mode-edit-delete');
-    })
-    cancelBtnElem.classList.add('edit-mode');
-    saveBtnElem.classList.add('edit-mode');
+    // btnsToHide.forEach((btn) => {
+    //   btn.classList.add('edit-mode-edit-delete');
+    // })
+    // cancelBtnElem.classList.add('edit-mode');
+    // saveBtnElem.classList.add('edit-mode');
 
-    // for (const btn of btnsToHide) {
-    //   btn.style.display = 'none';
-    // }
-    // for (const editB of editBtns) {
-    //   editB.style.display = 'inline-block';
-    // }
-    // cancelBtnElem.style.display = 'inline-block';
+    for (const btn of btnsToHide) {
+      btn.style.display = 'none';
+    }
+    for (const editB of editBtns) {
+      editB.style.display = 'inline-block';
+    }
+    cancelBtnElem.style.display = 'inline-block';
     editMemberInputElem.value = memberNameSpan.innerHTML;
     editMemberInputElem.focus();
-    // memberNameSpan.style.display = 'none';
+    editMemberInputElem.style.display = 'inline-block'
+    memberNameSpan.style.display = 'none';
 
     // edit save Changes functionalty
     saveBtnElem.addEventListener('click', function () {
@@ -651,13 +603,13 @@ function createNewMember(member, id) {
 
 // in appData************************************************************************************
       const memberToEditInAppData = getMembers().find(memberToEdit);
-      memberToEditInAppData['name'] = editMemberInputElem.value;
-// ******************
+      updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
+
       if (editMemberInputElem.value === '') {
         editMemberInputElem.value = memberNameSpan.innerHTML;
-
+        updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
       }
-
+// ***************
       memberNameSpan.innerHTML = editMemberInputElem.value;
       memberNameSpan.style.display = 'inline-block';
       editMemberInputElem.style.display = 'none';
@@ -695,8 +647,8 @@ function addMemberEventListener() {
       createNewMember(newMemberName, id);
       inputElem.value = '';
 
-      // in appData****************************************************************************
-      appData.members.push({name: newMemberName, id: id});
+      // in appData*********
+      addMemberToAppData(newMemberName,id)
     }
   })
 }
@@ -726,7 +678,7 @@ function modalInit() {
 
 
 // ****************Import JSON stuff****************
-function areJSONSHeher() {
+function areJSONSHere() {
 
   if (appData.members.length && appData.lists.length) {
     return true;
@@ -743,7 +695,8 @@ function getBoardJSON() {
     listData = JSON.parse(data.responseText);
     appData.lists = listData.board;
 
-    if (areJSONSHeher()) {
+    if (areJSONSHere()) {
+      setAppDataLocalStorage()
       createContentByHash()
 
     }
@@ -767,7 +720,8 @@ function getMembersJSON() {
     listMember = JSON.parse(membersData.responseText);
     appData.members = listMember.members
 
-    if (areJSONSHeher()) {
+    if (areJSONSHere()) {
+      setAppDataLocalStorage()
       createContentByHash()
     }
 
@@ -781,6 +735,22 @@ function getMembersJSON() {
 
 }
 
-getBoardJSON();
-getMembersJSON();
+
+// Local Storage*****
+function setAppDataLocalStorage() {
+  localStorage.setItem('appData',JSON.stringify(appData) );
+}
+function bringAppDataFromLocalStorage() {
+   const appDataFromLoicalSrotage = localStorage.getItem('appData');
+
+   return JSON.parse(appDataFromLoicalSrotage);
+}
+
+if (bringAppDataFromLocalStorage()) {
+  appData = bringAppDataFromLocalStorage();
+  createContentByHash();
+}else {
+  getBoardJSON();
+  getMembersJSON();
+}
 modalInit()
