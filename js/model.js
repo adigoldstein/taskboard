@@ -1,3 +1,8 @@
+let appData = {
+  lists: [],
+  members: []
+};
+
 
 function getMembers() {
   return appData.members;
@@ -28,28 +33,28 @@ function findNoteInListById(listInAppData, noteId) {
 
 function updateNoteInAppdata(noteInAppData, cardText) {
   noteInAppData.text = cardText;
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
-function updateMembersOfNote(noteInAppData,newMenbersOfNote) {
+function updateMembersOfNote(noteInAppData, newMenbersOfNote) {
   noteInAppData.members = newMenbersOfNote;
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 
 function getMemberNameById(member) {
-  let memberName ='';
+  let memberName = '';
   for (const membersData of  getMembers()) {
     if (membersData.id === member) {
-       memberName = membersData.name;
+      memberName = membersData.name;
     }
   }
   return memberName
 }
-function removeTaskFromAppData(containingList,noteToRemove) {
+function removeTaskFromAppData(containingList, noteToRemove) {
   const indexToRemove = containingList.tasks.indexOf(noteToRemove);
   containingList.tasks.splice(indexToRemove, 1);
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 function getNoteInfoMembers(noteinfo) {
@@ -63,7 +68,7 @@ function getNoteMembers(noteToEditinappData) {
   return noteToEditinappData.members
 }
 
-function addNewNoteToAppData(listId,noteUuid) {
+function addNewNoteToAppData(listId, noteUuid) {
   for (const list of getLists()) {
     if (list.id === listId) {
       list.tasks.push({
@@ -73,30 +78,29 @@ function addNewNoteToAppData(listId,noteUuid) {
       })
     }
   }
-  localStorage.setItem('appData',JSON.stringify(appData) );
-
+  setAppDataLocalStorage()
 }
 
 function addNewListToAppData(listToAddToAppData) {
-getLists().push(listToAddToAppData);
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  getLists().push(listToAddToAppData);
+  setAppDataLocalStorage()
 }
 
-function editListTitleInAppData(listToEdit,h3Elem) {
+function editListTitleInAppData(listToEdit, h3Elem) {
   listToEdit.title = h3Elem.innerHTML;
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 function removeListFromAppData(appDataElemToDelete) {
   const indexToDelete = getLists().indexOf(appDataElemToDelete);
   getLists().splice(indexToDelete, 1);
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 
 function deleteMemberFromAppData(indexOfToRemove) {
   getMembers().splice(indexOfToRemove, 1);
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 
 }
@@ -111,21 +115,38 @@ function removeMemberDeletedFromTasks(id) {
       })
     })
   })
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 
-function updateMemberNameInAppData(memberToEditInAppData,editMemberInputElem) {
+function updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem) {
   memberToEditInAppData.name = editMemberInputElem.value;
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
 
-function addMemberToAppData(newMemberName,id) {
+function addMemberToAppData(newMemberName, id) {
   getMembers().push({name: newMemberName, id: id});
-  localStorage.setItem('appData',JSON.stringify(appData) );
+  setAppDataLocalStorage()
 
 }
+function setLists(listData) {
+  appData.lists = listData;
+  setAppDataLocalStorage()
+}
 
+function setMembers(listMember) {
+  appData.members = listMember;
+  setAppDataLocalStorage()
+}
+
+function bringAppDataFromLocalStorage() {
+  const appDataFromLocalStorage = localStorage.getItem('appData');
+  appData = JSON.parse(appDataFromLocalStorage);
+}
+
+function setAppDataLocalStorage() {
+  localStorage.setItem('appData', JSON.stringify(appData));
+}
 
 

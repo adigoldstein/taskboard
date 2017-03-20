@@ -1,7 +1,3 @@
-let appData = {
-  lists: [],
-  members: []
-};
 
 // uuid random id example:
 // console.info(uuid());
@@ -71,7 +67,7 @@ function createMembers() {
   mainElem.innerHTML = membersTamplet;
   addMemberEventListener();
 
-  for (const member of appData.members) {
+  for (const member of getMembers()) {
     createNewMember(member.name, member.id)
   }
 }
@@ -284,7 +280,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
     addNewNoteToAppData(listId, noteUuid)
   }
-// ***********************************************************
+// ****
 
 }
 
@@ -648,7 +644,7 @@ function addMemberEventListener() {
       inputElem.value = '';
 
       // in appData*********
-      addMemberToAppData(newMemberName,id)
+      addMemberToAppData(newMemberName, id)
     }
   })
 }
@@ -680,7 +676,7 @@ function modalInit() {
 // ****************Import JSON stuff****************
 function areJSONSHere() {
 
-  if (appData.members.length && appData.lists.length) {
+  if (getMembers().length && getLists().length) {
     return true;
   } else {
     return false;
@@ -693,7 +689,7 @@ function getBoardJSON() {
 
   function reqListener() {
     listData = JSON.parse(data.responseText);
-    appData.lists = listData.board;
+    setLists(listData.board)
 
     if (areJSONSHere()) {
       setAppDataLocalStorage()
@@ -718,13 +714,12 @@ function getMembersJSON() {
 
   function reqListenerMembers() {
     listMember = JSON.parse(membersData.responseText);
-    appData.members = listMember.members
+   setMembers(listMember.members);
 
     if (areJSONSHere()) {
       setAppDataLocalStorage()
       createContentByHash()
     }
-
   }
 
   const membersData = new XMLHttpRequest();
@@ -732,25 +727,15 @@ function getMembersJSON() {
   membersData.addEventListener("load", reqListenerMembers);
   membersData.open("GET", "assets/members.json");
   membersData.send();
-
 }
 
-
-// Local Storage*****
-function setAppDataLocalStorage() {
-  localStorage.setItem('appData',JSON.stringify(appData) );
-}
-function bringAppDataFromLocalStorage() {
-   const appDataFromLoicalSrotage = localStorage.getItem('appData');
-
-   return JSON.parse(appDataFromLoicalSrotage);
-}
-
-if (bringAppDataFromLocalStorage()) {
-  appData = bringAppDataFromLocalStorage();
+if (localStorage.getItem('appData')) {
+   bringAppDataFromLocalStorage();
   createContentByHash();
-}else {
+} else {
   getBoardJSON();
   getMembersJSON();
 }
-modalInit()
+
+modalInit();
+

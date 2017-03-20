@@ -31,14 +31,11 @@ main {
   padding-top: 60px;
 }
 
-
 .card-list {
   padding-top: 10px;
   display: flex;
   list-style: none;
 }
-
-
 
 .card {
   flex-direction: row;
@@ -82,8 +79,6 @@ main {
   bottom: 5px;
   right: 10px;
 }
-
-
 
 .panel-heading input {
   width: 60%;
@@ -171,8 +166,6 @@ main {
   width: 600px;
 }
 
-
-
 .member-name {
   font-size: 18px;
   font-weight: bold;
@@ -193,23 +186,22 @@ main {
   margin-left: 5px;
   display: none;
 }
+
 .member-li:hover .btn-to-show-on-hover {
   display: inline-block;
 }
-.member-li button.edit-mode-edit-delete{
+
+.member-li button.edit-mode-edit-delete {
   display: none;
 }
 
-button.edit-mode   {
+button.edit-mode {
   display: inline-block;
 }
-
-
 
 .form-group {
   margin-bottom: 0;
 }
-
 
 /********MODAL STUFF********/
 
