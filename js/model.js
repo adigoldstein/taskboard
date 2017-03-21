@@ -178,7 +178,3 @@ return {
   setAppDataLocalStorage
 }
 })();
-
-
-
-

@@ -5,6 +5,7 @@
 
 // Create HTML skeleton dynamic
 
+
 function createContentByHash() {
   if (window.location.hash === '#members') {
     createMembers();
@@ -247,6 +248,21 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
     // Shows Note content from Appdata:
     modalCardText.value = MODEL.getNoteText(noteToEditinappData);
+
+    // fill move to
+    const moveToSelect = modalElem.querySelector('.move-to-options');
+    MODEL.getLists().forEach(function (list) {
+      console.info(list)
+      const optionElem = document.createElement('option');
+      optionElem.innerHTML = list.title
+      optionElem.setAttribute('data-id', 'list.id');
+      if (list.id === mainListId){
+        optionElem.setAttribute('selected', true);
+      };
+      console.info(optionElem);
+      moveToSelect.appendChild(optionElem);
+    })
+
 
 // fill members
     const memberListHolder = document.querySelector('.members-checkbox');
