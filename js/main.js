@@ -8,12 +8,19 @@
 function createContentByHash() {
   if (window.location.hash === '#members') {
     createMembers();
-
-
+    const membersNavElem = document.querySelector('.nav-members');
+    membersNavElem.classList.add('active');
+    const boardNavElem = document.querySelector('.nav-board');
+    boardNavElem.classList.remove('active');
   }
 
   if (window.location.hash === '#board' || window.location.hash === '') {
+
     createBoard();
+    const membersNavElem = document.querySelector('.nav-members');
+    membersNavElem.classList.remove('active');
+    const boardNavElem = document.querySelector('.nav-board');
+    boardNavElem.classList.add('active');
   }
 }
 window.addEventListener('hashchange', () => {
@@ -43,7 +50,7 @@ function createBoard() {
 
   const addListBtn = document.querySelector('.add-list-btn');
   addListBtn.addEventListener('click', addList);
-  for (const list of getLists()) {
+  for (const list of MODEL.getLists()) {
     addList(list);
   }
 }
@@ -67,7 +74,7 @@ function createMembers() {
   mainElem.innerHTML = membersTamplet;
   addMemberEventListener();
 
-  for (const member of getMembers()) {
+  for (const member of MODEL.getMembers()) {
     createNewMember(member.name, member.id)
   }
 }
@@ -91,11 +98,11 @@ function saveChangesEditNote(e) {
     }
   });
   // update modal text to appData**
-  const listInAppData = findListInAppDataById(listId);
+  const listInAppData = MODEL.findListInAppDataById(listId);
 
-  const noteInAppData = findNoteInListById(listInAppData, noteId);
+  const noteInAppData = MODEL.findNoteInListById(listInAppData, noteId);
 
-  updateNoteInAppdata(noteInAppData, cardTextarea.value)
+  MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value)
 // ***************
   // members checkbox
 
@@ -108,7 +115,7 @@ function saveChangesEditNote(e) {
     }
   }
   // update members on appData****
-  updateMembersOfNote(noteInAppData, newMenbersOfNote);
+  MODEL.updateMembersOfNote(noteInAppData, newMenbersOfNote);
 // *********************
 // in UI
 
@@ -118,7 +125,7 @@ function saveChangesEditNote(e) {
   for (let member of newMenbersOfNote) {
 
     // ************turning member id to member name
-    memberName = getMemberNameById(member);
+    memberName = MODEL.getMemberNameById(member);
 
 
     const labelElem = document.createElement('span');
@@ -155,9 +162,9 @@ function deleteNoteHandler(e) {
       note.remove();
       const listId = modalElem.getAttribute('list-id');
       // delete Note in appData******
-      const containingList = findListInAppDataById(listId);
-      const noteToRemove = findNoteInListById(containingList, checkedNoteId);
-      removeTaskFromAppData(containingList, noteToRemove);
+      const containingList = MODEL.findListInAppDataById(listId);
+      const noteToRemove = MODEL.findNoteInListById(containingList, checkedNoteId);
+      MODEL.removeTaskFromAppData(containingList, noteToRemove);
 // ***********************
     }
   })
@@ -197,9 +204,9 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
   if (noteInfo) {
     let memberName = '';
-    for (let member of getNoteInfoMembers(noteInfo)) {
+    for (let member of MODEL.getNoteInfoMembers(noteInfo)) {
       // ************turning member id to member name
-      memberName = getMemberNameById(member);
+      memberName = MODEL.getMemberNameById(member);
 
       const labelElem = document.createElement('span');
       // get The first letter of each word
@@ -235,16 +242,16 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     modalElem.setAttribute('list-id', mainListId);
 
 
-    const listToEditInappData = findListInAppDataById(mainListId);
-    const noteToEditinappData = findNoteInListById(listToEditInappData, noteToEditId);
+    const listToEditInappData = MODEL.findListInAppDataById(mainListId);
+    const noteToEditinappData = MODEL.findNoteInListById(listToEditInappData, noteToEditId);
 
     // Shows Note content from Appdata:
-    modalCardText.value = getNoteText(noteToEditinappData);
+    modalCardText.value = MODEL.getNoteText(noteToEditinappData);
 
 // fill members
     const memberListHolder = document.querySelector('.members-checkbox');
     memberListHolder.innerHTML = '';
-    getMembers().forEach((member) => {
+    MODEL.getMembers().forEach((member) => {
       const memberId = member.id;
       const memberName = member.name;
       const memElm = document.createElement('label');
@@ -257,7 +264,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     })
 
     // find which members are in note
-    const membersInThisNote = getNoteMembers(noteToEditinappData);
+    const membersInThisNote = MODEL.getNoteMembers(noteToEditinappData);
 
     const membersList = modalElem.querySelectorAll('input');
     membersInThisNote.forEach((memberInList) => {
@@ -278,7 +285,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   // add to appData************************************************************************************
   if (!noteInfo) {
     const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
-    addNewNoteToAppData(listId, noteUuid)
+    MODEL.addNewNoteToAppData(listId, noteUuid)
   }
 // ****
 
@@ -354,7 +361,7 @@ function addList(listData) {
       tasks: [],
       id: id
     };
-    addNewListToAppData(listToAddToAppData);
+    MODEL.addNewListToAppData(listToAddToAppData);
   }
 
   // add card button listener
@@ -411,8 +418,8 @@ function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
   inputElem.style.display = 'none'
 
   // in appData********************************************************************
-  const listToEdit = findListInAppDataById(listLiId);
-  editListTitleInAppData(listToEdit, h3Elem);
+  const listToEdit = MODEL.findListInAppDataById(listLiId);
+  MODEL.editListTitleInAppData(listToEdit, h3Elem);
 }
 // ************************************************
 function inputListener(item) {
@@ -472,9 +479,9 @@ function deleteCardListener(deleteLiElem) {
       cardToDeleteLiElem.remove();
       // Remove from appData**********************************************************************
 
-      const appDataElemToDelete = findListInAppDataById(idToDel);
+      const appDataElemToDelete = MODEL.findListInAppDataById(idToDel);
 
-      removeListFromAppData(appDataElemToDelete)
+      MODEL.removeListFromAppData(appDataElemToDelete)
     } else {
       ulHoldsDelete.style.display = 'none';
     }
@@ -552,11 +559,11 @@ function createNewMember(member, id) {
 
     // in appDate
     // ******************************************************************************************??????????????????
-    const memberElemToRemove = getMembers().find(memberToDelete);
-    const indexOfToRemove = getMembers().indexOf(memberElemToRemove);
-    deleteMemberFromAppData(indexOfToRemove);
+    const memberElemToRemove = MODEL.getMembers().find(memberToDelete);
+    const indexOfToRemove = MODEL.getMembers().indexOf(memberElemToRemove);
+    MODEL.deleteMemberFromAppData(indexOfToRemove);
 
-    removeMemberDeletedFromTasks(id);
+    MODEL.removeMemberDeletedFromTasks(id);
 
   })
   // edit member
@@ -598,12 +605,12 @@ function createNewMember(member, id) {
       }
 
 // in appData************************************************************************************
-      const memberToEditInAppData = getMembers().find(memberToEdit);
-      updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
+      const memberToEditInAppData = MODEL.getMembers().find(memberToEdit);
+      MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
 
       if (editMemberInputElem.value === '') {
         editMemberInputElem.value = memberNameSpan.innerHTML;
-        updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
+        MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
       }
 // ***************
       memberNameSpan.innerHTML = editMemberInputElem.value;
@@ -644,7 +651,7 @@ function addMemberEventListener() {
       inputElem.value = '';
 
       // in appData*********
-      addMemberToAppData(newMemberName, id)
+      MODEL.addMemberToAppData(newMemberName, id)
     }
   })
 }
@@ -676,7 +683,7 @@ function modalInit() {
 // ****************Import JSON stuff****************
 function areJSONSHere() {
 
-  if (getMembers().length && getLists().length) {
+  if (MODEL.getMembers().length && MODEL.getLists().length) {
     return true;
   } else {
     return false;
@@ -689,10 +696,10 @@ function getBoardJSON() {
 
   function reqListener() {
     listData = JSON.parse(data.responseText);
-    setLists(listData.board)
+    MODEL.setLists(listData.board)
 
     if (areJSONSHere()) {
-      setAppDataLocalStorage()
+      MODEL.setAppDataLocalStorage()
       createContentByHash()
 
     }
@@ -714,10 +721,10 @@ function getMembersJSON() {
 
   function reqListenerMembers() {
     listMember = JSON.parse(membersData.responseText);
-   setMembers(listMember.members);
+   MODEL.setMembers(listMember.members);
 
     if (areJSONSHere()) {
-      setAppDataLocalStorage()
+      MODEL.setAppDataLocalStorage()
       createContentByHash()
     }
   }
@@ -730,7 +737,7 @@ function getMembersJSON() {
 }
 
 if (localStorage.getItem('appData')) {
-   bringAppDataFromLocalStorage();
+   MODEL.bringAppDataFromLocalStorage();
   createContentByHash();
 } else {
   getBoardJSON();
