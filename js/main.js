@@ -154,7 +154,7 @@ function saveChangesEditNote(e) {
 
   oldLabelDiv.innerHTML = labelDivElem.innerHTML;
 
-// move To Section
+// move-To Section
 
   const moveToSelect= modalElem.querySelectorAll('.move-to-options option');
   let newIdSelected = ';'
@@ -171,7 +171,11 @@ function saveChangesEditNote(e) {
     // add new note
     MODEL.addNoteToAppData(newIdSelected,noteInAppData);
     // remove old note
-    MODEL.removeTaskFromAppData(listInAppData, noteInAppData);
+    MODEL.removeTaskFromAppData()
+
+    // in UI
+
+
 
 
   }
