@@ -82,6 +82,19 @@ const MODEL = (function () {
     setAppDataLocalStorage()
   }
 
+  function addNoteToAppData(listId, note) {
+    for (const list of getLists()) {
+      if (list.id === listId) {
+        list.tasks.push({
+          members: note.members,
+          text: note.text,
+          id: note.id
+        })
+      }
+    }
+    setAppDataLocalStorage()
+  }
+
   function addNewListToAppData(listToAddToAppData) {
     getLists().push(listToAddToAppData);
     setAppDataLocalStorage()
@@ -165,6 +178,7 @@ return {
   getNoteText,
   getNoteMembers,
   addNewNoteToAppData,
+  addNoteToAppData,
   addNewListToAppData,
   editListTitleInAppData,
   removeListFromAppData,

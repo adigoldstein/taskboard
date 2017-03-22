@@ -103,7 +103,11 @@ function saveChangesEditNote(e) {
 
   const noteInAppData = MODEL.findNoteInListById(listInAppData, noteId);
 
-  MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value)
+  MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value);
+
+
+
+
 // ***************
   // members checkbox
 
@@ -149,6 +153,28 @@ function saveChangesEditNote(e) {
   const oldLabelDiv = noteElem.querySelector('.lable-div');
 
   oldLabelDiv.innerHTML = labelDivElem.innerHTML;
+
+// move To Section
+
+  const moveToSelect= modalElem.querySelectorAll('.move-to-options option');
+  let newIdSelected = ';'
+  moveToSelect.forEach(function (option) {
+    if (option.selected) {
+      newIdSelected = option.getAttribute('data-id');
+    };
+  })
+  if (newIdSelected !== listId) {
+    console.info('changed!!');
+    const newListToAddTo = MODEL.findListInAppDataById(newIdSelected);
+    console.info(newListToAddTo);
+    // in appData:
+    // add new note
+    MODEL.addNoteToAppData(newIdSelected,noteInAppData);
+    // remove old note
+    MODEL.removeTaskFromAppData(listInAppData, noteInAppData);
+
+
+  }
 
 
 }
@@ -251,15 +277,14 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
     // fill move to
     const moveToSelect = modalElem.querySelector('.move-to-options');
+    moveToSelect.innerHTML = '';
     MODEL.getLists().forEach(function (list) {
-      console.info(list)
       const optionElem = document.createElement('option');
       optionElem.innerHTML = list.title
-      optionElem.setAttribute('data-id', 'list.id');
+      optionElem.setAttribute('data-id', list.id);
       if (list.id === mainListId){
         optionElem.setAttribute('selected', true);
       };
-      console.info(optionElem);
       moveToSelect.appendChild(optionElem);
     })
 
