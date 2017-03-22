@@ -1,4 +1,3 @@
-
 // uuid random id example:
 // console.info(uuid());
 
@@ -106,8 +105,6 @@ function saveChangesEditNote(e) {
   MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value);
 
 
-
-
 // ***************
   // members checkbox
 
@@ -156,12 +153,13 @@ function saveChangesEditNote(e) {
 
 // move-To Section
 
-  const moveToSelect= modalElem.querySelectorAll('.move-to-options option');
+  const moveToSelect = modalElem.querySelectorAll('.move-to-options option');
   let newIdSelected = ';'
   moveToSelect.forEach(function (option) {
     if (option.selected) {
       newIdSelected = option.getAttribute('data-id');
-    };
+    }
+    ;
   })
   if (newIdSelected !== listId) {
     console.info('changed!!');
@@ -169,13 +167,27 @@ function saveChangesEditNote(e) {
     console.info(newListToAddTo);
     // in appData:
     // add new note
-    MODEL.addNoteToAppData(newIdSelected,noteInAppData);
+    MODEL.addNoteToAppData(newIdSelected, noteInAppData);
     // remove old note
-    MODEL.removeTaskFromAppData()
+    MODEL.removeTaskFromAppData(listInAppData, noteInAppData)
 
     // in UI
+    // const newListElem
 
+    console.info(noteElem); //* note elem!!!!
+    // const newListElem = MODEL.findListInAppDataById(newIdSelected);
+    // console.info(newListElem);
+    const allListsElms = document.querySelectorAll('.list-li');
+    console.info(allListsElms);
+    allListsElms.forEach((list) => {
+      const listId = list.getAttribute('data-id');
+      if (newIdSelected === listId) {
+        const notesUl = list.querySelector('.notes-ul')
+        console.info(notesUl);
+        notesUl.appendChild(noteElem)
+      }
 
+    })
 
 
   }
@@ -286,9 +298,10 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
       const optionElem = document.createElement('option');
       optionElem.innerHTML = list.title
       optionElem.setAttribute('data-id', list.id);
-      if (list.id === mainListId){
+      if (list.id === mainListId) {
         optionElem.setAttribute('selected', true);
-      };
+      }
+      ;
       moveToSelect.appendChild(optionElem);
     })
 
@@ -766,7 +779,7 @@ function getMembersJSON() {
 
   function reqListenerMembers() {
     listMember = JSON.parse(membersData.responseText);
-   MODEL.setMembers(listMember.members);
+    MODEL.setMembers(listMember.members);
 
     if (areJSONSHere()) {
       MODEL.setAppDataLocalStorage()
@@ -782,7 +795,7 @@ function getMembersJSON() {
 }
 
 if (localStorage.getItem('appData')) {
-   MODEL.bringAppDataFromLocalStorage();
+  MODEL.bringAppDataFromLocalStorage();
   createContentByHash();
 } else {
   getBoardJSON();
