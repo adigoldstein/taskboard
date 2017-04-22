@@ -1,7 +1,3 @@
-// uuid random id example:
-// console.info(uuid());
-
-
 // Create HTML skeleton dynamic
 
 
@@ -172,11 +168,7 @@ function saveChangesEditNote(e) {
     MODEL.removeTaskFromAppData(listInAppData, noteInAppData)
 
     // in UI
-    // const newListElem
 
-    console.info(noteElem); //* note elem!!!!
-    // const newListElem = MODEL.findListInAppDataById(newIdSelected);
-    // console.info(newListElem);
     const allListsElms = document.querySelectorAll('.list-li');
     console.info(allListsElms);
     allListsElms.forEach((list) => {
@@ -636,15 +628,16 @@ function createNewMember(member, id) {
     const editBtns = liMemberElem.querySelectorAll('.edit-btns');
     const cancelBtnElem = liMemberElem.querySelector('.cancel-btn');
     const saveBtnElem = liMemberElem.querySelector('.save-btn');
-    // btnsToHide.forEach((btn) => {
-    //   btn.classList.add('edit-mode-edit-delete');
-    // })
+    btnsToHide.forEach((btn) => {
+      console.info(btn);
+      btn.classList.add('edit-mode-hide');
+    })
     // cancelBtnElem.classList.add('edit-mode');
     // saveBtnElem.classList.add('edit-mode');
 
-    for (const btn of btnsToHide) {
-      btn.style.display = 'none';
-    }
+    // for (const btn of btnsToHide) {
+    //   btn.style.display = 'none';
+    // }
     for (const editB of editBtns) {
       editB.style.display = 'inline-block';
     }
@@ -662,6 +655,15 @@ function createNewMember(member, id) {
         return member.name === memberName;
       }
 
+      btnsToHide.forEach((btn) => {
+        console.info(btn);
+        btn.classList.remove('edit-mode-hide');
+      })
+      for (const editB of editBtns) {
+        editB.style.display = 'none';
+      }
+
+
 // in appData************************************************************************************
       const memberToEditInAppData = MODEL.getMembers().find(memberToEdit);
       MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
@@ -670,12 +672,12 @@ function createNewMember(member, id) {
         editMemberInputElem.value = memberNameSpan.innerHTML;
         MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
       }
-// ***************
+
       memberNameSpan.innerHTML = editMemberInputElem.value;
       memberNameSpan.style.display = 'inline-block';
       editMemberInputElem.style.display = 'none';
 
-      btnsToHide.style.display = 'none';
+      // btnsToHide.style.display = 'none';
 
     })
 

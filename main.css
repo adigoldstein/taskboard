@@ -190,8 +190,7 @@ main {
 .member-li:hover .btn-to-show-on-hover {
   display: inline-block;
 }
-
-.member-li button.edit-mode-edit-delete {
+.member-li:hover button.edit-mode-hide {
   display: none;
 }
 
