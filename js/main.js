@@ -158,9 +158,7 @@ function saveChangesEditNote(e) {
     ;
   })
   if (newIdSelected !== listId) {
-    console.info('changed!!');
     const newListToAddTo = MODEL.findListInAppDataById(newIdSelected);
-    console.info(newListToAddTo);
     // in appData:
     // add new note
     MODEL.addNoteToAppData(newIdSelected, noteInAppData);
@@ -170,12 +168,10 @@ function saveChangesEditNote(e) {
     // in UI
 
     const allListsElms = document.querySelectorAll('.list-li');
-    console.info(allListsElms);
     allListsElms.forEach((list) => {
       const listId = list.getAttribute('data-id');
       if (newIdSelected === listId) {
         const notesUl = list.querySelector('.notes-ul')
-        console.info(notesUl);
         notesUl.appendChild(noteElem)
       }
 
@@ -483,7 +479,6 @@ function inputListener(item) {
       if (inputElem.value === '') {
         inputElem.value = h3Elem.innerHTML;
       }
-      console.info('1');
       editListTitleAndUpdateAppdata(h3Elem, inputElem);
     }
   })
@@ -493,7 +488,6 @@ function inputListener(item) {
       inputElem.value = h3Elem.innerHTML;
     }
 
-    console.info('2');
     editListTitleAndUpdateAppdata(h3Elem, inputElem);
 
   })
@@ -629,7 +623,6 @@ function createNewMember(member, id) {
     const cancelBtnElem = liMemberElem.querySelector('.cancel-btn');
     const saveBtnElem = liMemberElem.querySelector('.save-btn');
     btnsToHide.forEach((btn) => {
-      console.info(btn);
       btn.classList.add('edit-mode-hide');
     })
 
@@ -651,7 +644,6 @@ function createNewMember(member, id) {
       }
 
       btnsToHide.forEach((btn) => {
-        console.info(btn);
         btn.classList.remove('edit-mode-hide');
       });
       for (const editB of editBtns) {
