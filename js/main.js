@@ -31,8 +31,8 @@ function createBoard() {
       <li class="cards-li list-li  add-list-li">
         <div class="card">
           <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title add-list-btn">Add list..</h3>
+            <div class="panel-heading add-list-panel">
+              <h3 class="panel-title add-list-btn ">Add list..</h3>
             </div>
           </div>
         </div>
@@ -357,7 +357,7 @@ const tampletLi = `
       <div class="card content-card">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">New list inserted</h3>
+            <h3 class="panel-title">My new list</h3>
             <input type="text">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -632,12 +632,7 @@ function createNewMember(member, id) {
       console.info(btn);
       btn.classList.add('edit-mode-hide');
     })
-    // cancelBtnElem.classList.add('edit-mode');
-    // saveBtnElem.classList.add('edit-mode');
 
-    // for (const btn of btnsToHide) {
-    //   btn.style.display = 'none';
-    // }
     for (const editB of editBtns) {
       editB.style.display = 'inline-block';
     }
@@ -658,7 +653,7 @@ function createNewMember(member, id) {
       btnsToHide.forEach((btn) => {
         console.info(btn);
         btn.classList.remove('edit-mode-hide');
-      })
+      });
       for (const editB of editBtns) {
         editB.style.display = 'none';
       }
@@ -679,7 +674,7 @@ function createNewMember(member, id) {
 
       // btnsToHide.style.display = 'none';
 
-    })
+    });
 
 
     // cancel button functionality
@@ -756,10 +751,10 @@ function getBoardJSON() {
 
   function reqListener() {
     listData = JSON.parse(data.responseText);
-    MODEL.setLists(listData.board)
+    MODEL.setLists(listData.board);
 
     if (areJSONSHere()) {
-      MODEL.setAppDataLocalStorage()
+      MODEL.setAppDataLocalStorage();
       createContentByHash()
 
     }

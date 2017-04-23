@@ -17,8 +17,8 @@ html, body {
 
 .navbar img {
   display: inline-block;
-  vertical-align: middle;
   height: 100%;
+  padding-top: 5px;
 }
 
 .navbar .navbar-header {
@@ -40,7 +40,6 @@ main {
 .card {
   flex-direction: row;
   width: 260px;
-  /*border-radius: 10px;*/
   margin: 0 15px;
   min-height: 300px;
   overflow: hidden;
@@ -51,7 +50,7 @@ main {
   max-height: calc(100vh - 200px);
   border-right: 1px solid #F5F5F5;
   border-left: 1px solid #F5F5F5;
-  padding-left: 0;
+  padding: 10px 0;
 
 }
 
@@ -132,6 +131,23 @@ main {
   top: 3px;
 }
 
+.dropdown-menu {
+  position: absolute;
+  width: 150px;
+  left: -125px;
+  height: 30px;
+}
+
+.dropdown-menu li {
+  padding-left: 10px;
+  width: 150px;
+  height: 100%;
+}
+
+ul .delete-card {
+  width: 150px;
+}
+
 .note-text {
   padding: 30px 5px;
 }
@@ -150,12 +166,20 @@ main {
   cursor: pointer;
 }
 
+.card .panel .add-list-panel {
+  background-color: lightblue;
+}
+
 .add-list-li .panel-heading {
   /*padding: 0;*/
   /*height: 40px;*/
 }
 
 /********Members section********/
+
+#members {
+  margin-left: 30px;
+}
 
 .members-area h1 {
   font-size: 36px;
@@ -190,6 +214,7 @@ main {
 .member-li:hover .btn-to-show-on-hover {
   display: inline-block;
 }
+
 .member-li:hover button.edit-mode-hide {
   display: none;
 }
