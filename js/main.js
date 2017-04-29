@@ -53,7 +53,7 @@ function createBoard() {
 
 
 function createMembers() {
-  const membersTamplet = `<section id="members">
+  const membersTemplate = `<section id="members">
     <h1>Taskboard Members</h1>
     <ul class="list-group members-list">
       <li class="list-group-item add-member-li">
@@ -67,7 +67,7 @@ function createMembers() {
 
   const mainElem = document.querySelector('main');
 
-  mainElem.innerHTML = membersTamplet;
+  mainElem.innerHTML = membersTemplate;
   addMemberEventListener();
 
   for (const member of MODEL.getMembers()) {
@@ -75,12 +75,98 @@ function createMembers() {
   }
 }
 
+function updateModalTextAndMembers(listId, noteId, cardTextarea, modalElem, noteElem) {
+  const listInAppData = MODEL.findListInAppDataById(listId);
+
+  const noteInAppData = MODEL.findNoteInListById(listInAppData, noteId);
+
+  MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value);
+
+
+// ***************
+  // members checkbox
+
+  const membersInputsElems = modalElem.querySelectorAll('input');
+  const newMembersOfNote = [];
+  for (const member of membersInputsElems) {
+    if (member.checked) {
+      const newMemberId = member.getAttribute('member-id');
+      newMembersOfNote.push(newMemberId)
+    }
+  }
+  // update members on appData****
+  MODEL.updateMembersOfNote(noteInAppData, newMembersOfNote);
+
+// in UI
+
+  const labelDivElem = document.createElement('div');
+  labelDivElem.setAttribute('class', 'label-div');
+
+  for (let member of newMembersOfNote) {
+
+    // ************turning member id to member name
+    let memberName = MODEL.getMemberNameById(member);
+
+
+    const labelElem = document.createElement('span');
+    // get The first letter of each word
+    let abbrev = memberName.split(' ');
+    let nameHolder = '';
+    for (const part of abbrev) {
+      let nameIn = [];
+      nameIn = part[0];
+      nameHolder += nameIn;
+    }
+
+    labelElem.textContent = nameHolder;
+    labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
+    labelElem.setAttribute('title', memberName);
+
+    labelDivElem.appendChild(labelElem);
+  }
+
+  const oldLabelDiv = noteElem.querySelector('.label-div');
+
+  oldLabelDiv.innerHTML = labelDivElem.innerHTML;
+
+}
+
+function updateMoveTo(modalElem, listId, noteId, noteElem) {
+  const moveToSelect = modalElem.querySelectorAll('.move-to-options option');
+  let newIdSelected = ';';
+  moveToSelect.forEach(function (option) {
+    if (option.selected) {
+      newIdSelected = option.getAttribute('data-id');
+    }
+
+  });
+  if (newIdSelected !== listId) {
+    // in appData:
+    // add new note
+    const listInAppData = MODEL.findListInAppDataById(listId);
+    const noteInAppData = MODEL.findNoteInListById(listInAppData, noteId);
+    MODEL.addNoteToAppData(newIdSelected, noteInAppData);
+    // remove old note
+
+    MODEL.removeTaskFromAppData(listInAppData, noteInAppData);
+
+    // in UI
+
+    const allListsElms = document.querySelectorAll('.list-li');
+    allListsElms.forEach((list) => {
+      const listId = list.getAttribute('data-id');
+      if (newIdSelected === listId) {
+        const notesUl = list.querySelector('.notes-ul');
+        notesUl.appendChild(noteElem)
+      }
+    })
+  }
+}
 // save changes on notes edit**
 function saveChangesEditNote(e) {
   let modalElem = e.target.closest('.modal');
   modalElem.style.display = 'none';
   const cardTextarea = modalElem.querySelector('.card-textarea');
-  // const cardUIElem = e.target.querySelector('.note-text-span');
   const noteId = modalElem.getAttribute('note-id');
   const listId = modalElem.getAttribute('list-id');
   const allNotesElems = document.querySelectorAll('.note');
@@ -93,95 +179,14 @@ function saveChangesEditNote(e) {
       noteElem = note;
     }
   });
-  // update modal text to appData**
-  const listInAppData = MODEL.findListInAppDataById(listId);
 
-  const noteInAppData = MODEL.findNoteInListById(listInAppData, noteId);
-
-  MODEL.updateNoteInAppdata(noteInAppData, cardTextarea.value);
-
-
-// ***************
-  // members checkbox
-
-  const membersInputsElems = modalElem.querySelectorAll('input');
-  const newMenbersOfNote = [];
-  for (const member of membersInputsElems) {
-    if (member.checked) {
-      const newMemberId = member.getAttribute('member-id');
-      newMenbersOfNote.push(newMemberId)
-    }
-  }
-  // update members on appData****
-  MODEL.updateMembersOfNote(noteInAppData, newMenbersOfNote);
-// *********************
-// in UI
-
-  const labelDivElem = document.createElement('div');
-  labelDivElem.setAttribute('class', 'lable-div');
-  let memberName = '';
-  for (let member of newMenbersOfNote) {
-
-    // ************turning member id to member name
-    memberName = MODEL.getMemberNameById(member);
-
-
-    const labelElem = document.createElement('span');
-    // get The first letter of each word
-    let abbrev = memberName.split(' ');
-    let nameholder = '';
-    for (const part of abbrev) {
-      let nameIn = [];
-      nameIn = part[0];
-      nameholder += nameIn;
-    }
-
-    labelElem.textContent = nameholder;
-    labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
-    labelElem.setAttribute('title', memberName);
-
-    labelDivElem.appendChild(labelElem);
-  }
-
-  const oldLabelDiv = noteElem.querySelector('.lable-div');
-
-  oldLabelDiv.innerHTML = labelDivElem.innerHTML;
-
-// move-To Section
-
-  const moveToSelect = modalElem.querySelectorAll('.move-to-options option');
-  let newIdSelected = ';'
-  moveToSelect.forEach(function (option) {
-    if (option.selected) {
-      newIdSelected = option.getAttribute('data-id');
-    }
-    ;
-  })
-  if (newIdSelected !== listId) {
-    const newListToAddTo = MODEL.findListInAppDataById(newIdSelected);
-    // in appData:
-    // add new note
-    MODEL.addNoteToAppData(newIdSelected, noteInAppData);
-    // remove old note
-    MODEL.removeTaskFromAppData(listInAppData, noteInAppData)
-
-    // in UI
-
-    const allListsElms = document.querySelectorAll('.list-li');
-    allListsElms.forEach((list) => {
-      const listId = list.getAttribute('data-id');
-      if (newIdSelected === listId) {
-        const notesUl = list.querySelector('.notes-ul')
-        notesUl.appendChild(noteElem)
-      }
-
-    })
-
-
-  }
+  updateModalTextAndMembers(listId, noteId, cardTextarea, modalElem, noteElem);
+  updateMoveTo(modalElem, listId, noteId, noteElem);
 
 
 }
+
+
 function deleteNoteHandler(e) {
   const modalElem = e.target.closest('.modal');
   modalElem.style.display = 'none';
@@ -196,9 +201,85 @@ function deleteNoteHandler(e) {
       const containingList = MODEL.findListInAppDataById(listId);
       const noteToRemove = MODEL.findNoteInListById(containingList, checkedNoteId);
       MODEL.removeTaskFromAppData(containingList, noteToRemove);
-// ***********************
     }
   })
+}
+
+function fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, noteInfo) {
+  editBtnElem.addEventListener('click', function (e) {
+
+    const modalElem = document.querySelector('.modal ');
+    const modalCardText = modalElem.querySelector('.card-textarea');
+    modalElem.style.display = 'block';
+
+    // fill modal with relevant content*********
+    let noteElem = e.target.closest('.note');
+
+    const noteToEditId = noteElem.getAttribute('data-id');
+    const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
+    modalElem.setAttribute('note-id', noteToEditId);
+    modalElem.setAttribute('list-id', mainListId);
+
+
+    const listToEditInappData = MODEL.findListInAppDataById(mainListId);
+    const noteToEditInappData = MODEL.findNoteInListById(listToEditInappData, noteToEditId);
+
+    // Shows Note content from Appdata:
+    modalCardText.value = MODEL.getNoteText(noteToEditInappData);
+
+    // fill move to
+    const moveToSelect = modalElem.querySelector('.move-to-options');
+    moveToSelect.innerHTML = '';
+    MODEL.getLists().forEach(function (list) {
+      const optionElem = document.createElement('option');
+      optionElem.innerHTML = list.title;
+      optionElem.setAttribute('data-id', list.id);
+      if (list.id === mainListId) {
+        optionElem.setAttribute('selected', '');
+      }
+
+      moveToSelect.appendChild(optionElem);
+    });
+
+
+// fill members
+    const memberListHolder = document.querySelector('.members-checkbox');
+    memberListHolder.innerHTML = '';
+    MODEL.getMembers().forEach((member) => {
+      const memberId = member.id;
+      const memberName = member.name;
+      const memElm = document.createElement('label');
+      memElm.innerHTML = `<input type="checkbox" value=""><span class="member-name-span"></span>`;
+      memberListHolder.appendChild(memElm);
+      const nameSpanElem = memElm.querySelector('.member-name-span');
+      nameSpanElem.innerHTML = memberName;
+      const inputElem = memElm.querySelector('input');
+      inputElem.setAttribute('member-id', memberId);
+    });
+
+    // find which members are in note
+    const membersInThisNote = MODEL.getNoteMembers(noteToEditInappData);
+
+    const membersList = modalElem.querySelectorAll('input');
+    membersInThisNote.forEach((memberInList) => {
+      membersList.forEach((inputOfMembers) => {
+        const inputMemberId = inputOfMembers.getAttribute('member-id');
+        if (inputMemberId === memberInList) {
+          inputOfMembers.checked = true;
+        }
+      })
+    })
+  });
+
+
+  editNoteListener(liNoteElem);
+  notesUlElem.appendChild(liNoteElem);
+
+  // add to appData*
+  if (!noteInfo) {
+    const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
+    MODEL.addNewNoteToAppData(listId, noteUuid)
+  }
 }
 
 function addNoteWTextAndLabels(notesUlElem, noteInfo) {
@@ -230,26 +311,26 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   liNoteElem.appendChild(noteTextSpan);
 
   const labelDivElem = document.createElement('div');
-  labelDivElem.setAttribute('class', 'lable-div');
+  labelDivElem.setAttribute('class', 'label-div');
   liNoteElem.appendChild(labelDivElem);
 
   if (noteInfo) {
-    let memberName = '';
+
     for (let member of MODEL.getNoteInfoMembers(noteInfo)) {
       // ************turning member id to member name
-      memberName = MODEL.getMemberNameById(member);
+      let memberName = MODEL.getMemberNameById(member);
 
       const labelElem = document.createElement('span');
       // get The first letter of each word
       let abbrev = memberName.split(' ');
-      let nameholder = '';
+      let nameHolder = '';
       for (const part of abbrev) {
         let nameIn = [];
         nameIn = part[0];
-        nameholder += nameIn;
+        nameHolder += nameIn;
       }
 
-      labelElem.textContent = nameholder;
+      labelElem.textContent = nameHolder;
       labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
       labelElem.setAttribute('title', memberName);
 
@@ -258,87 +339,12 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
 
   }
 // Edit Modal***********************************
-  editBtnElem.addEventListener('click', function (e) {
-
-    const modalElem = document.querySelector('.modal ');
-    const modalCardText = modalElem.querySelector('.card-textarea')
-    modalElem.style.display = 'block';
-
-    // fill modal with relevant content*********
-    let noteElem = e.target.closest('.note');
-
-    const noteToEditId = noteElem.getAttribute('data-id');
-    const mainListId = noteElem.closest('.list-li').getAttribute('data-id');
-    modalElem.setAttribute('note-id', noteToEditId);
-    modalElem.setAttribute('list-id', mainListId);
-
-
-    const listToEditInappData = MODEL.findListInAppDataById(mainListId);
-    const noteToEditinappData = MODEL.findNoteInListById(listToEditInappData, noteToEditId);
-
-    // Shows Note content from Appdata:
-    modalCardText.value = MODEL.getNoteText(noteToEditinappData);
-
-    // fill move to
-    const moveToSelect = modalElem.querySelector('.move-to-options');
-    moveToSelect.innerHTML = '';
-    MODEL.getLists().forEach(function (list) {
-      const optionElem = document.createElement('option');
-      optionElem.innerHTML = list.title
-      optionElem.setAttribute('data-id', list.id);
-      if (list.id === mainListId) {
-        optionElem.setAttribute('selected', true);
-      }
-      ;
-      moveToSelect.appendChild(optionElem);
-    })
-
-
-// fill members
-    const memberListHolder = document.querySelector('.members-checkbox');
-    memberListHolder.innerHTML = '';
-    MODEL.getMembers().forEach((member) => {
-      const memberId = member.id;
-      const memberName = member.name;
-      const memElm = document.createElement('label');
-      memElm.innerHTML = `<input type="checkbox" value=""><span class="member-name-span"></span>`;
-      memberListHolder.appendChild(memElm);
-      const nameSpanElem = memElm.querySelector('.member-name-span');
-      nameSpanElem.innerHTML = memberName;
-      const inputElem = memElm.querySelector('input');
-      inputElem.setAttribute('member-id', memberId);
-    })
-
-    // find which members are in note
-    const membersInThisNote = MODEL.getNoteMembers(noteToEditinappData);
-
-    const membersList = modalElem.querySelectorAll('input');
-    membersInThisNote.forEach((memberInList) => {
-      membersList.forEach((inputOfmembers) => {
-        const inputMemberId = inputOfmembers.getAttribute('member-id');
-        if (inputMemberId === memberInList) {
-          inputOfmembers.checked = true;
-        }
-      })
-    })
-  });
-
-
-  editNoteListener(liNoteElem);
-  notesUlElem.appendChild(liNoteElem);
-
-
-  // add to appData************************************************************************************
-  if (!noteInfo) {
-    const listId = liNoteElem.closest('.list-li').getAttribute('data-id');
-    MODEL.addNewNoteToAppData(listId, noteUuid)
-  }
-// ****
+  fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, noteInfo);
 
 }
 
+// end of modal
 
-// end of modal stuff***************************
 
 function addCardBtnListener(btnToListen) {
 
@@ -385,7 +391,7 @@ function addList(listData) {
 
 
   if (listData.type !== 'click') {
-// ******************When inserting JSON data**********************
+//  **When inserting JSON data**
     liListElem.setAttribute('data-id', listData.id);
     const cardTitle = liListElem.querySelector('.panel-title');
     const noteUl = liListElem.querySelector('.notes-ul');
@@ -401,7 +407,7 @@ function addList(listData) {
     const id = uuid();
     liListElem.setAttribute('data-id', id);
 
-    // add to appData******************************************************************************************
+    // add to appData
     const listToAddToAppData = {
       title: 'New list inserted',
       tasks: [],
@@ -461,13 +467,13 @@ function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
   const listLiId = h3Elem.closest('.list-li').getAttribute('data-id')
   h3Elem.textContent = inputElem.value;
   h3Elem.style.display = 'block';
-  inputElem.style.display = 'none'
+  inputElem.style.display = 'none';
 
-  // in appData********************************************************************
+  // in appData***
   const listToEdit = MODEL.findListInAppDataById(listLiId);
   MODEL.editListTitleInAppData(listToEdit, h3Elem);
 }
-// ************************************************
+
 function inputListener(item) {
   const inputElem = item.querySelector('input');
   const h3Elem = item.querySelector('h3');
@@ -487,9 +493,7 @@ function inputListener(item) {
     if (inputElem.value === '') {
       inputElem.value = h3Elem.innerHTML;
     }
-
     editListTitleAndUpdateAppdata(h3Elem, inputElem);
-
   })
 
 }
@@ -541,7 +545,7 @@ function DeleteCard() {
     deleteCardListener(deleteLiElem);
   }
 }
-DeleteCard()
+DeleteCard();
 
 // edit note behavior
 function editNoteListener(noteElem) {
@@ -571,6 +575,49 @@ const addMemberTamplet = `<span class="member-name"></span>
     <button type="button" class="btn btn-default edit-btns cancel-btn pull-right">Cancel</button>
     <button type="button" class="btn btn-success edit-btns save-btn pull-right">Save</button>`;
 
+function memberSaveChanges(memberNameSpan, btnsToHide, editBtns, editMemberInputElem) {
+  const memberName = memberNameSpan.innerHTML;
+
+  function memberToEdit(member) {
+    return member.name === memberName;
+  }
+
+  btnsToHide.forEach((btn) => {
+    btn.classList.remove('edit-mode-hide');
+  });
+  for (const editB of editBtns) {
+    editB.style.display = 'none';
+  }
+
+
+// in appData
+  const memberToEditInAppData = MODEL.getMembers().find(memberToEdit);
+  MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
+
+  if (editMemberInputElem.value === '') {
+    editMemberInputElem.value = memberNameSpan.innerHTML;
+    MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
+  }
+
+  memberNameSpan.innerHTML = editMemberInputElem.value;
+  memberNameSpan.style.display = 'inline-block';
+  editMemberInputElem.style.display = 'none';
+
+}
+function addMemberHandler(e) {
+  const inputElem = e.target.closest('.form-group').querySelector('input');
+  const newMemberName = inputElem.value;
+
+  if (newMemberName !== '') {
+    const id = uuid();
+    createNewMember(newMemberName, id);
+    inputElem.value = '';
+
+    // in appData*********
+    MODEL.addMemberToAppData(newMemberName, id)
+  }
+}
+
 function createNewMember(member, id) {
 
   const membersListElem = document.querySelector('.members-list');
@@ -591,7 +638,7 @@ function createNewMember(member, id) {
 
     const ulMembersElem = e.target.closest('.members-list');
     const liMemberElem = e.target.closest('.member-li');
-    ulMembersElem.removeChild(liMemberElem)
+    ulMembersElem.removeChild(liMemberElem);
 
 
     const memberNameToDelete = (liMemberElem.querySelector('.member-name').innerHTML);
@@ -602,14 +649,13 @@ function createNewMember(member, id) {
     }
 
     // in appDate
-    // ******************************************************************************************??????????????????
     const memberElemToRemove = MODEL.getMembers().find(memberToDelete);
     const indexOfToRemove = MODEL.getMembers().indexOf(memberElemToRemove);
     MODEL.deleteMemberFromAppData(indexOfToRemove);
 
     MODEL.removeMemberDeletedFromTasks(id);
 
-  })
+  });
   // edit member
   const editMemberBtn = newMemberToAdd.querySelector('.edit-member-btn');
   editMemberBtn.addEventListener('click', function (e) {
@@ -624,7 +670,7 @@ function createNewMember(member, id) {
     const saveBtnElem = liMemberElem.querySelector('.save-btn');
     btnsToHide.forEach((btn) => {
       btn.classList.add('edit-mode-hide');
-    })
+    });
 
     for (const editB of editBtns) {
       editB.style.display = 'inline-block';
@@ -632,42 +678,18 @@ function createNewMember(member, id) {
     cancelBtnElem.style.display = 'inline-block';
     editMemberInputElem.value = memberNameSpan.innerHTML;
     editMemberInputElem.focus();
-    editMemberInputElem.style.display = 'inline-block'
+    editMemberInputElem.style.display = 'inline-block';
     memberNameSpan.style.display = 'none';
 
-    // edit save Changes functionalty
-    saveBtnElem.addEventListener('click', function () {
-      const memberName = memberNameSpan.innerHTML;
+    // save Changes functionality on clock and with ENTER
+    saveBtnElem.addEventListener('click', () => memberSaveChanges(memberNameSpan, btnsToHide, editBtns, editMemberInputElem));
 
-      function memberToEdit(member) {
-        return member.name === memberName;
+    editMemberInputElem.addEventListener('keyup', (e) => {
+
+      if (e.key === 'Enter') {
+        memberSaveChanges(memberNameSpan, btnsToHide, editBtns, editMemberInputElem);
       }
-
-      btnsToHide.forEach((btn) => {
-        btn.classList.remove('edit-mode-hide');
-      });
-      for (const editB of editBtns) {
-        editB.style.display = 'none';
-      }
-
-
-// in appData************************************************************************************
-      const memberToEditInAppData = MODEL.getMembers().find(memberToEdit);
-      MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
-
-      if (editMemberInputElem.value === '') {
-        editMemberInputElem.value = memberNameSpan.innerHTML;
-        MODEL.updateMemberNameInAppData(memberToEditInAppData, editMemberInputElem);
-      }
-
-      memberNameSpan.innerHTML = editMemberInputElem.value;
-      memberNameSpan.style.display = 'inline-block';
-      editMemberInputElem.style.display = 'none';
-
-      // btnsToHide.style.display = 'none';
-
     });
-
 
     // cancel button functionality
     cancelBtnElem.addEventListener('click', function () {
@@ -681,26 +703,22 @@ function createNewMember(member, id) {
       memberNameSpan.style.display = 'inline-block';
     });
 
-  })
+  });
   membersListElem.insertBefore(newMemberToAdd, addMemberLiElem);
 }
 
 function addMemberEventListener() {
   const addMemberBtn = document.querySelector('.add-member-btn');
+  const addMemberInputElem = addMemberBtn.closest('.form-group').querySelector('.add-member-input');
 
-  addMemberBtn.addEventListener('click', function (e) {
-    const inputElem = e.target.closest('.form-group').querySelector('input');
-    const newMemberName = inputElem.value;
+  addMemberInputElem.addEventListener('keyup', (e) => {
 
-    if (newMemberName !== '') {
-      const id = uuid();
-      createNewMember(newMemberName, id);
-      inputElem.value = '';
-
-      // in appData*********
-      MODEL.addMemberToAppData(newMemberName, id)
+    if (e.key === 'Enter') {
+      addMemberHandler()
     }
-  })
+  });
+
+  addMemberBtn.addEventListener('click', (e) => addMemberHandler(e))
 }
 
 function modalInit() {
@@ -713,11 +731,11 @@ function modalInit() {
   const xModalCloseBtn = modalElem.querySelector('.close');
   xModalCloseBtn.addEventListener('click', function () {
     closeModal()
-  })
+  });
   const modalCloseBtn = modalElem.querySelector('.modal-close-btn');
   modalCloseBtn.addEventListener('click', function () {
     closeModal()
-  })
+  });
   const saveBtn = modalElem.querySelector('.modal-save-changed');
   saveBtn.addEventListener('click', saveChangesEditNote);
 
@@ -759,9 +777,6 @@ function getBoardJSON() {
 }
 
 
-// **************************************
-
-
 function getMembersJSON() {
 
   let listMember = {};
@@ -771,7 +786,7 @@ function getMembersJSON() {
     MODEL.setMembers(listMember.members);
 
     if (areJSONSHere()) {
-      MODEL.setAppDataLocalStorage()
+      MODEL.setAppDataLocalStorage();
       createContentByHash()
     }
   }
