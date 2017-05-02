@@ -51,7 +51,6 @@ main {
   border-right: 1px solid #F5F5F5;
   border-left: 1px solid #F5F5F5;
   padding: 10px 0;
-
 }
 
 .note {
@@ -60,8 +59,7 @@ main {
   border: 2px solid lightblue;
   border-radius: 10px;
   list-style: none;
-  padding: 10px;
-  padding-bottom: 30px;
+  padding: 10px 10px 30px;
   margin: 15px auto;
   position: relative;
 }
@@ -142,6 +140,10 @@ main {
   padding-left: 10px;
   width: 150px;
   height: 100%;
+}
+
+.dropdown-menu li:hover {
+  cursor: pointer;
 }
 
 ul .delete-card {

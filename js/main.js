@@ -407,13 +407,15 @@ function addList(listData) {
     const id = uuid();
     liListElem.setAttribute('data-id', id);
 
+
     // add to appData
     const listToAddToAppData = {
-      title: 'New list inserted',
+      title: 'My new list',
       tasks: [],
       id: id
     };
     MODEL.addNewListToAppData(listToAddToAppData);
+
   }
 
   // add card button listener
