@@ -119,16 +119,16 @@ const MODEL = (function () {
 
   }
   function removeMemberDeletedFromTasks(id) {
-    getLists().forEach((list) => {
-      getTasksInList(list).forEach((task) => {
+    for (const list of getLists()) {
+      for (const task of getTasksInList(list)){
         task.members.forEach((memberIdInTasks) => {
           if (memberIdInTasks === id) {
             const indexToRemove = task.members.indexOf(memberIdInTasks);
             task.members.splice(indexToRemove, 1);
           }
         })
-      })
-    })
+      }
+    }
     setAppDataLocalStorage()
 
   }
