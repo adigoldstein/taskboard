@@ -397,8 +397,8 @@ function addList(listData) {
 
     listTitleElem.innerHTML = listData.title;
 
-    for (const task of listData.tasks) {
-      addNoteWTextAndLabels(noteUlElem, task)
+    for (const note of listData.tasks) {
+      addNoteWTextAndLabels(noteUlElem, note)
     }
 
   } else {

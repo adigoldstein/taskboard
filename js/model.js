@@ -13,7 +13,7 @@ const MODEL = (function () {
     return appData.lists
   }
 
-  function getTasksInList(listElem) {
+  function getNotesInList(listElem) {
     return listElem.tasks;
   }
 
@@ -26,7 +26,7 @@ const MODEL = (function () {
   }
 
   function findNoteInListById(listInAppData, noteId) {
-    const noteInAppData = getTasksInList(listInAppData).find((task) => {
+    const noteInAppData = getNotesInList(listInAppData).find((task) => {
       return task.id === noteId;
     });
     return noteInAppData
@@ -52,7 +52,7 @@ const MODEL = (function () {
     }
     return memberName
   }
-  function removeTaskFromAppData(containingList, noteToRemove) {
+  function removeNoteFromAppData(containingList, noteToRemove) {
     const indexToRemove = containingList.tasks.indexOf(noteToRemove);
     containingList.tasks.splice(indexToRemove, 1);
     setAppDataLocalStorage()
@@ -118,9 +118,9 @@ const MODEL = (function () {
 
 
   }
-  function removeMemberDeletedFromTasks(id) {
+  function removeMemberDeletedFromNotes(id) {
     for (const list of getLists()) {
-      for (const task of getTasksInList(list)){
+      for (const task of getNotesInList(list)){
         task.members.forEach((memberIdInTasks) => {
           if (memberIdInTasks === id) {
             const indexToRemove = task.members.indexOf(memberIdInTasks);
@@ -167,13 +167,13 @@ const MODEL = (function () {
 return {
   getMembers,
   getLists,
-  getTasksInList,
+  getNotesInList,
   findListInAppDataById,
   findNoteInListById,
   updateNoteInAppdata,
   updateMembersOfNote,
   getMemberNameById,
-  removeTaskFromAppData,
+  removeNoteFromAppData,
   getNoteInfoMembers,
   getNoteText,
   getNoteMembers,
@@ -183,7 +183,7 @@ return {
   editListTitleInAppData,
   removeListFromAppData,
   deleteMemberFromAppData,
-  removeMemberDeletedFromTasks,
+  removeMemberDeletedFromNotes,
   updateMemberNameInAppData,
   addMemberToAppData,
   setLists,
