@@ -26,7 +26,7 @@ window.addEventListener('hashchange', () => {
 );
 
 function createBoard() {
-  const boardTamplet = `<section id="board">
+  const boardTemplate = `<section id="board">
     <ul class="card-list">
       <li class="cards-li list-li  add-list-li">
         <div class="card">
@@ -42,7 +42,7 @@ function createBoard() {
 
   const mainElem = document.querySelector('main');
 
-  mainElem.innerHTML = boardTamplet;
+  mainElem.innerHTML = boardTemplate;
 
   const addListBtn = document.querySelector('.add-list-btn');
   addListBtn.addEventListener('click', addList);
@@ -197,7 +197,7 @@ function deleteNoteHandler(e) {
     if (checkedNoteId === noteId) {
       note.remove();
       const listId = modalElem.getAttribute('list-id');
-      // delete Note in appData******
+      // delete Note in appData
       const containingList = MODEL.findListInAppDataById(listId);
       const noteToRemove = MODEL.findNoteInListById(containingList, checkedNoteId);
       MODEL.removeTaskFromAppData(containingList, noteToRemove);
@@ -209,10 +209,10 @@ function fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, no
   editBtnElem.addEventListener('click', function (e) {
 
     const modalElem = document.querySelector('.modal ');
-    const modalCardText = modalElem.querySelector('.card-textarea');
+    const modalCardTextElem = modalElem.querySelector('.card-textarea');
     modalElem.style.display = 'block';
 
-    // fill modal with relevant content*********
+    // fill modal with relevant content
     let noteElem = e.target.closest('.note');
 
     const noteToEditId = noteElem.getAttribute('data-id');
@@ -224,8 +224,8 @@ function fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, no
     const listToEditInappData = MODEL.findListInAppDataById(mainListId);
     const noteToEditInappData = MODEL.findNoteInListById(listToEditInappData, noteToEditId);
 
-    // Shows Note content from Appdata:
-    modalCardText.value = MODEL.getNoteText(noteToEditInappData);
+    // Shows Note content from Appdata
+    modalCardTextElem.value = MODEL.getNoteText(noteToEditInappData);
 
     // fill move to
     const moveToSelect = modalElem.querySelector('.move-to-options');
@@ -259,8 +259,8 @@ function fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, no
 
     // find which members are in note
     const membersInThisNote = MODEL.getNoteMembers(noteToEditInappData);
-
     const membersList = modalElem.querySelectorAll('input');
+
     membersInThisNote.forEach((memberInList) => {
       membersList.forEach((inputOfMembers) => {
         const inputMemberId = inputOfMembers.getAttribute('member-id');
@@ -296,6 +296,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   const noteUuid = uuid();
   noteTextSpan.setAttribute('class', 'note-text-span');
   let noteText = '';
+
   if (!noteInfo) {
     noteTextSpan.textContent = 'New note created...';
     liNoteElem.setAttribute('data-id', noteUuid);
@@ -317,20 +318,19 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
   if (noteInfo) {
 
     for (let member of MODEL.getNoteInfoMembers(noteInfo)) {
-      // ************turning member id to member name
       let memberName = MODEL.getMemberNameById(member);
 
       const labelElem = document.createElement('span');
-      // get The first letter of each word
+      // get The first letter of each word:
       let abbrev = memberName.split(' ');
-      let nameHolder = '';
+      let nameInitials = '';
       for (const part of abbrev) {
         let nameIn = [];
         nameIn = part[0];
-        nameHolder += nameIn;
+        nameInitials += nameIn;
       }
 
-      labelElem.textContent = nameHolder;
+      labelElem.textContent = nameInitials;
       labelElem.setAttribute('class', 'label member-name-label label-primary member-name-label');
       labelElem.setAttribute('title', memberName);
 
@@ -338,7 +338,7 @@ function addNoteWTextAndLabels(notesUlElem, noteInfo) {
     }
 
   }
-// Edit Modal***********************************
+// Edit Modal
   fillModalWithContent(editBtnElem, notesUlElem, liNoteElem, noteUuid, noteInfo);
 
 }
@@ -381,26 +381,24 @@ const tampletLi = `
 
 function addList(listData) {
 
-  const mainUlList = document.querySelector('.card-list');
-  const addListLI = document.querySelector('.add-list-li');
+  const mainUlListElem = document.querySelector('.card-list');
+  const addListLiElem = document.querySelector('.add-list-li');
   const liListElem = document.createElement('li');
 
-  liListElem.className = 'cards-li';
-  liListElem.className = 'list-li';
+  liListElem.className = 'cards-li list-li';
   liListElem.innerHTML = tampletLi;
 
 
   if (listData.type !== 'click') {
 //  **When inserting JSON data**
     liListElem.setAttribute('data-id', listData.id);
-    const cardTitle = liListElem.querySelector('.panel-title');
-    const noteUl = liListElem.querySelector('.notes-ul');
+    const cardTitleElem = liListElem.querySelector('.panel-title');
+    const noteUlElem = liListElem.querySelector('.notes-ul');
 
-    cardTitle.innerHTML = listData.title;
-
+    cardTitleElem.innerHTML = listData.title;
 
     for (const task of listData.tasks) {
-      addNoteWTextAndLabels(noteUl, task)
+      addNoteWTextAndLabels(noteUlElem, task)
     }
 
   } else {
@@ -428,7 +426,7 @@ function addList(listData) {
 
   const dropdownElem = liListElem.querySelector('.dropdown');
 
-  // Hide ul by default to created lists.
+  // Hide drop down by default
   dropdownElem.querySelector('ul').style.display = 'none';
   toggleMenu(dropdownElem);
 
@@ -439,18 +437,17 @@ function addList(listData) {
 
 
   // insert created new list before the last list
-  mainUlList.insertBefore(liListElem, addListLI);
+  mainUlListElem.insertBefore(liListElem, addListLiElem);
 
 }
-
 
 // Change list name
 function hideH3FocusInput(e) {
   const evPressed = e.target;
-  const item = evPressed.closest('.card');
+  const note = evPressed.closest('.card');
 
-  const inputElem = item.querySelector('input');
-  const h3Elem = item.querySelector('h3');
+  const inputElem = note.querySelector('input');
+  const h3Elem = note.querySelector('h3');
 
   h3Elem.style.display = 'none';
   inputElem.style.display = 'inline-block';
@@ -465,6 +462,7 @@ function titleListenerToRename(item) {
   h3Elem.addEventListener('click', hideH3FocusInput);
 
 }
+
 function editListTitleAndUpdateAppdata(h3Elem, inputElem) {
   const listLiId = h3Elem.closest('.list-li').getAttribute('data-id')
   h3Elem.textContent = inputElem.value;
@@ -527,8 +525,8 @@ function deleteCardListener(deleteLiElem) {
 
     if (deleteAnswer) {
       cardToDeleteLiElem.remove();
-      // Remove from appData**********************************************************************
 
+      // Remove from appData
       const appDataElemToDelete = MODEL.findListInAppDataById(idToDel);
 
       MODEL.removeListFromAppData(appDataElemToDelete)
@@ -554,6 +552,7 @@ function editNoteListener(noteElem) {
   const editBtnElem = noteElem.querySelector('.note-edit-btn');
 
   noteElem.addEventListener('mouseover', function () {
+    // By default buttons display is undefined
     if (editBtnElem.style.display = 'none' || (!editBtnElem.style.display)) {
       editBtnElem.style.display = 'block'
     }
@@ -568,9 +567,9 @@ for (const noteElem of noteElems) {
   editNoteListener(noteElem)
 }
 
-// members section********************************************************************
+// members section
 
-const addMemberTamplet = `<span class="member-name"></span>
+const addMemberTemplate = `<span class="member-name"></span>
     <input type="email" class="form-control edit-member-input">
     <button type="button" class="btn btn-danger btn-to-show-on-hover delete-member-btn pull-right">Delete</button>
     <button type="button" class="btn btn-warning btn-to-show-on-hover edit-member-btn pull-right">Edit</button>
@@ -587,10 +586,10 @@ function memberSaveChanges(memberNameSpan, btnsToHide, editBtns, editMemberInput
   btnsToHide.forEach((btn) => {
     btn.classList.remove('edit-mode-hide');
   });
+
   for (const editB of editBtns) {
     editB.style.display = 'none';
   }
-
 
 // in appData
   const memberToEditInAppData = MODEL.getMembers().find(memberToEdit);
@@ -615,7 +614,8 @@ function addMemberHandler(e) {
     createNewMember(newMemberName, id);
     inputElem.value = '';
 
-    // in appData*********
+    // in appData
+
     MODEL.addMemberToAppData(newMemberName, id)
   }
 }
@@ -629,10 +629,8 @@ function createNewMember(member, id) {
   newMemberToAdd.setAttribute('class', 'list-group-item member-li');
   newMemberToAdd.setAttribute('data-id', id);
 
-
-  newMemberToAdd.innerHTML = addMemberTamplet;
+  newMemberToAdd.innerHTML = addMemberTemplate;
   newMemberToAdd.querySelector('span').textContent = member;
-
 
   // Delete member
   const deleteMemberBtn = newMemberToAdd.querySelector('.delete-member-btn');
