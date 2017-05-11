@@ -27,9 +27,9 @@ window.addEventListener('hashchange', () => {
 
 function createBoard() {
   const boardTemplate = `<section id="board">
-    <ul class="card-list">
-      <li class="cards-li list-li  add-list-li">
-        <div class="card">
+    <ul class="list-list">
+      <li class="list-li  add-list-li">
+        <div class="list">
           <div class="panel panel-default">
             <div class="panel-heading add-list-panel">
               <h3 class="panel-title add-list-btn ">Add list..</h3>
@@ -350,13 +350,13 @@ function addCardBtnListener(btnToListen) {
 
   btnToListen.addEventListener('click', function addCard(e) {
 
-    const notesUlElem = (e.target.closest('.card').querySelector('.notes-ul'));
+    const notesUlElem = (e.target.closest('.list').querySelector('.notes-ul'));
     addNoteWTextAndLabels(notesUlElem);
   })
 }
 
 const tampletLi = `
-      <div class="card content-card">
+      <div class="list content-list">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">My new list</h3>
@@ -366,7 +366,7 @@ const tampletLi = `
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                  <li class="delete-card">Delete card</li>
+                  <li class="delete-list">Delete list</li>
                 </ul>
               </div>
           </div>
@@ -381,21 +381,21 @@ const tampletLi = `
 
 function addList(listData) {
 
-  const mainUlListElem = document.querySelector('.card-list');
+  const mainUlListElem = document.querySelector('.list-list');
   const addListLiElem = document.querySelector('.add-list-li');
   const liListElem = document.createElement('li');
 
-  liListElem.className = 'cards-li list-li';
+  liListElem.className = 'list-li';
   liListElem.innerHTML = tampletLi;
 
 
   if (listData.type !== 'click') {
 //  **When inserting JSON data**
     liListElem.setAttribute('data-id', listData.id);
-    const cardTitleElem = liListElem.querySelector('.panel-title');
+    const listTitleElem = liListElem.querySelector('.panel-title');
     const noteUlElem = liListElem.querySelector('.notes-ul');
 
-    cardTitleElem.innerHTML = listData.title;
+    listTitleElem.innerHTML = listData.title;
 
     for (const task of listData.tasks) {
       addNoteWTextAndLabels(noteUlElem, task)
@@ -416,7 +416,7 @@ function addList(listData) {
 
   }
 
-  // add card button listener
+  // add list button listener
 
   addCardBtnListener(liListElem.querySelector('.add-note-btn'));
   titleListenerToRename(liListElem.querySelector('.panel-heading'));
@@ -430,9 +430,9 @@ function addList(listData) {
   dropdownElem.querySelector('ul').style.display = 'none';
   toggleMenu(dropdownElem);
 
-  // Delete card listener
+  // Delete list listener
 
-  const deleteCardLiElem = liListElem.querySelector('.delete-card');
+  const deleteCardLiElem = liListElem.querySelector('.delete-list');
   deleteCardListener(deleteCardLiElem);
 
 
@@ -444,7 +444,7 @@ function addList(listData) {
 // Change list name
 function hideH3FocusInput(e) {
   const evPressed = e.target;
-  const note = evPressed.closest('.card');
+  const note = evPressed.closest('.list');
 
   const inputElem = note.querySelector('input');
   const h3Elem = note.querySelector('h3');
@@ -517,14 +517,14 @@ function toggleMenu(menu) {
 function deleteCardListener(deleteLiElem) {
 
   deleteLiElem.addEventListener('click', function () {
-    const cardToDeleteLiElem = deleteLiElem.closest('.list-li');
-    const cardToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
-    const deleteAnswer = confirm('Deleting ' + cardToDeleteTitle + ' list. are you sure?');
+    const listToDeleteElem = deleteLiElem.closest('.list-li');
+    const listToDeleteTitle = deleteLiElem.closest('.panel-heading').querySelector('.panel-title').innerHTML;
+    const deleteAnswer = confirm('Deleting ' + listToDeleteTitle + ' list. are you sure?');
     const ulHoldsDelete = deleteLiElem.closest(".dropdown-menu");
-    const idToDel = cardToDeleteLiElem.getAttribute('data-id');
+    const idToDel = listToDeleteElem.getAttribute('data-id');
 
     if (deleteAnswer) {
-      cardToDeleteLiElem.remove();
+      listToDeleteElem.remove();
 
       // Remove from appData
       const appDataElemToDelete = MODEL.findListInAppDataById(idToDel);
@@ -539,9 +539,9 @@ function deleteCardListener(deleteLiElem) {
 
 function DeleteCard() {
 
-  const deleteCardLiElems = document.querySelectorAll('.delete-card');
+  const deleteListElems = document.querySelectorAll('.delete-list');
 
-  for (const deleteLiElem of deleteCardLiElems) {
+  for (const deleteLiElem of deleteListElems) {
     deleteCardListener(deleteLiElem);
   }
 }
@@ -714,7 +714,7 @@ function addMemberEventListener() {
   addMemberInputElem.addEventListener('keyup', (e) => {
 
     if (e.key === 'Enter') {
-      addMemberHandler()
+      addMemberHandler(e)
     }
   });
 

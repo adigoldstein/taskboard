@@ -31,13 +31,13 @@ main {
   padding-top: 60px;
 }
 
-.card-list {
+.list-list {
   padding-top: 10px;
   display: flex;
   list-style: none;
 }
 
-.card {
+.list {
   flex-direction: row;
   width: 260px;
   margin: 0 15px;
@@ -146,7 +146,7 @@ main {
   cursor: pointer;
 }
 
-ul .delete-card {
+ul .delete-list {
   width: 150px;
 }
 
@@ -168,7 +168,7 @@ ul .delete-card {
   cursor: pointer;
 }
 
-.card .panel .add-list-panel {
+.list .panel .add-list-panel {
   background-color: lightblue;
 }
 
